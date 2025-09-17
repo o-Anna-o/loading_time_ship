@@ -1,0 +1,49 @@
+<html lang="en">
+<head>
+    <title>Loading time</title>
+    <link rel="stylesheet" href="/static/styles/index_style.css">
+</head>
+<body>
+
+<div class="header">
+    <h1>
+        <a href="/home"><img class="home-img header-icon" src="/static/img/home-img.svg" alt="home"></a>
+    </h1>
+
+    <form class="header__search" action="/home" method="GET">
+        <input class="search-input header__search-item header__search-input" type="text" name="capacity_query" placeholder="Поиск по вместимости контейнеровоза" value="{{ .capacity_query }}">
+        <button class="btn header__search-item search-btn" type="submit">Найти</button>
+    </form>
+
+    <h1>
+        <a href="/request"><img class="loading_time-img header-icon" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAn0lEQVR4nO3QMQ4BURSF4ckUEol1qGgobIGFaaxIi0ah0lAohE0QkU9GRvcGY15iIv72nXv+d2+S/BzoYq08a3RelTex8zl7tJ4JxnlwhbTE1imW+eykKNTGCVcM3i1/gH4+e0EvFJiKxywkyH4fi3NIcCepiKKerwnQwDZwhkVMwSYgmEcRlOUveMlfUG/BUTwOIcEoe4hRjmHVS9SHGxku7S0HDKVsAAAAAElFTkSuQmCC" alt="home"></a>
+    </h1>
+</div>
+
+<form class="page__search" action="/home" method="GET">
+        <input class="search-input page__search-input page__search-item" type="text" name="name_query" placeholder="Поиск контейнеровоза" value="{{ .name_query }}">
+        <button class="btn search-btn page__search-item" type="submit">Найти</button>
+</form>
+
+<ul class="ship-cards">
+    {{ range .ships }}
+    <li class="ship-item">
+        <div class="ship-image">
+            <img src="http://localhost:9000/loading-time-img/img/{{.PhotoURL}}" 
+                 alt="{{.Name}}"
+                 onerror="this.style.display='none'">
+        </div>
+        
+        <h2>
+            <a href="/ship/{{ .ID }}">{{ .Name }}</a>
+        </h2>
+        <div class="ship-item-text">
+            <p><b>Вместимость:</b> {{.Capacity}} TEU</p>
+            <p><b>Краны:</b> {{.Cranes}} одновременно</p>
+        </div>
+        <a href="/request/add/{{.ID}}" class="btn card-btn">Выбрать</a> 
+    </li>
+    {{ end }}
+</ul>
+</body>
+</html>

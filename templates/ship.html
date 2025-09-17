@@ -1,0 +1,37 @@
+<html lang="en">
+<head>
+    <title>Контейнеровоз {{ .ship.Name }}</title>
+    <link rel="stylesheet" href="/static/styles/ship_style.css">
+</head>
+<body>
+    <header>
+        <h1>
+            <a href="/home"><img class="home-img header-icon" src="/static/img/home-img.svg" alt="home"></a>
+        </h1>
+        <h1>
+            <a href="/request"><img class="loading_time-img header-icon" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAn0lEQVR4nO3QMQ4BURSF4ckUEol1qGgobIGFaaxIi0ah0lAohE0QkU9GRvcGY15iIv72nXv+d2+S/BzoYq08a3RelTex8zl7tJ4JxnlwhbTE1imW+eykKNTGCVcM3i1/gH4+e0EvFJiKxywkyH4fi3NIcCepiKKerwnQwDZwhkVMwSYgmEcRlOUveMlfUG/BUTwOIcEoe4hRjmHVS9SHGxku7S0HDKVsAAAAAElFTkSuQmCC" alt="home"></a>
+        </h1>
+    </header>
+    <div class="ship-card">
+        
+        <h1>{{ .ship.Name }}</h1>  
+        <img class="ship-card__img" src="http://localhost:9000/loading-time-img/img/{{.ship.PhotoURL}}" 
+                alt="{{.ship.Name}}"
+                onerror="this.style.display='none'">
+
+        <div class="ship-card__text">
+            <p><b>Вместимость:</b> {{ .ship.Capacity }} TEU</p>
+            <p><b>Габариты:</b> длина {{ .ship.Length }} м, ширина {{ .ship.Width }} м</p>
+            <p><b>Максимальное число контейнеров на 40 футов: </b>{{ .ship.Containers }} штук</p>
+            <p><b>Максимальное число кранов:</b> {{ .ship.Cranes }} одновременно</p>
+            <p><b>Особенности:</b> {{ .ship.Features }}</p>
+        </div>
+        <div class="ship-card__btns">
+        </div>
+        
+        
+    </div>
+</body>
+
+    
+</html> 

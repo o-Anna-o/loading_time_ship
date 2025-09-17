@@ -1,0 +1,144 @@
+* {
+    box-sizing: border-box; /* включает padding в общую ширину элемента */
+}
+
+body {
+    margin: 0;
+    background-color: #242422;
+    width: 1295px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+body, button, p, h1, h2, a {
+    font-family: "Gilroy", sans-serif;
+    color: #ffff;
+}  
+
+p, h1, h2, h3, a {
+    margin: 0;
+    padding: 0;
+    line-height: 1.4;
+}
+h1, h2 {
+    font-weight: 600;
+}
+h1 {
+    font-size: 46px;
+}
+h2 {
+    font-size: 30px;
+}
+p {
+    font-size: 25px;
+}
+.header-icon {
+    height: 40px;
+    cursor: pointer;
+}
+
+.header {
+    margin-top: 10px;
+    height: 52px;
+    gap: 30px;
+}
+.header, .header__search {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+input, .header__search-item, .page__search-item {
+    margin-top: 5px;
+    height: 52px;
+    width: 192px;
+}
+.header__search { 
+    padding-top: 10px;
+    gap: 10px;
+}
+
+.header__search-input {
+    padding: 12px 20px;
+    width: 390px;
+}
+
+.search-btn {
+    padding: 11px 56px;
+    height: 52px;
+}
+
+input {
+    background-color: #242422;
+    border-color: #ffff;
+    border-style: solid 1px;
+    border-radius: 5px;
+    color: #ffff;
+}
+.search-input {
+    font-size: 18px;
+    padding-left: 16px;
+}
+.page__search-input {
+    width: 1150px;
+}
+
+.page__search {
+    width: 1350px;
+    margin-left: 40px;
+    margin-bottom: 30px;
+    margin-top: 30px;
+
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+ul li a {
+    text-decoration: none;
+}
+.ship-cards {
+    width: 1350px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 28px;
+}
+.ship-item {
+    max-width: 660px;
+    background-color: #3A3A3A;
+    padding: 40px 40px;
+    border-radius: 5px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 26px;
+}
+
+.ship-image {
+    width: 561px;
+}
+.ship-item-text {
+    width: 489px;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.btn {
+    background-color: #AA9B7D;
+    border-radius: 5px;
+    font-size: 20px;
+    font-weight: 500;
+    padding: 14px 32px;
+    text-align: center;
+}
+.card-btn {
+    width: 489px;
+}
+
