@@ -3,7 +3,6 @@
 }
 
 body {
-    margin: 0;
     background-color: #242422;
     width: 1295px;
     margin: 0 auto;
@@ -37,37 +36,25 @@ p {
 .header-icon {
     height: 40px;
     cursor: pointer;
+    padding-left: 24px;
 }
 
 .header {
-    margin-top: 10px;
+    width: 1295px;
+    margin: 10px 0;
     height: 52px;
-    gap: 30px;
-}
-.header, .header__search {
+    
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-input, .header__search-item, .page__search-item {
-    margin-top: 5px;
-    height: 52px;
-    width: 192px;
+input, .page__search-item {
+    height: 51px;
 }
-.header__search { 
-    padding-top: 10px;
-    gap: 10px;
-}
-
-.header__search-input {
-    padding: 12px 20px;
-    width: 390px;
-}
-
 .search-btn {
-    padding: 11px 56px;
-    height: 52px;
+    padding: 12px 46px;
+    font-size: 25px;
 }
 
 input {
@@ -82,14 +69,13 @@ input {
     padding-left: 16px;
 }
 .page__search-input {
-    width: 1150px;
+    width: 1102px;
 }
 
 .page__search {
     width: 1350px;
-    margin-left: 40px;
-    margin-bottom: 30px;
-    margin-top: 30px;
+    margin-left: 30px;
+    margin-top: 10px;
 
     display: flex;
     align-items: center;
@@ -135,10 +121,33 @@ ul li a {
     border-radius: 5px;
     font-size: 20px;
     font-weight: 500;
-    padding: 14px 32px;
     text-align: center;
 }
 .card-btn {
     width: 489px;
+    padding: 14px 32px;
+}
+
+.cart-link {
+    position: relative;
+    display: inline-block; /* чтобы позиционировать дочерние элементы */
+    text-decoration: none;
+}
+
+.cart-count {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background-color: #AA9B7D;
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    font-size: 12px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
 }
 

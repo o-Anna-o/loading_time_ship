@@ -6,7 +6,7 @@
 <body>
     <header>
         <h1>
-            <a href="/home"><img class="home-img header-icon" src="/static/img/home-img.svg" alt="home"></a>
+            <a href="/ships"><img class="home-img header-icon" src="/static/img/home-img.svg" alt="home"></a>
         </h1>
     </header>
     <div class="request">
@@ -15,11 +15,11 @@
         
         <div class="request__counts">
             <div class="request__cnt request__cnt-20-f">
-                <p class="request__cnt-text">Количество 20-футовых контейнеров</p>
+                <p>Количество 20-футовых контейнеров</p>
                 <input class="request__cnt-input request__cnt-20-f" type="number" name="containers_20ft" placeholder="Введите целое число" value=" {{.request.Containers20ftCount}} ">
             </div>
             <div class="request__cnt request__cnt-40-f">
-                <p class="request__cnt-text">Количество 40-футовых контейнеров</p>
+                <p>Количество 40-футовых контейнеров</p>
                 <input class="request__cnt-input  request__cnt-40-f" type="number" name="containers_40ft" placeholder="Введите целое число" value=" {{.request.Containers40ftCount}} ">
             </div>
         </div>
@@ -55,12 +55,15 @@
                 </div>
             {{ end }}
         </div>
-
-        <div class="ship-card__btns">
-            <a href="/home" class="ship-card__btn beige-btn btn">Добавить контейнеровоз</a>
-            {{ if .request.Ships }}
-                <a href="/home" class="ship-card__btn beige-btn btn">Рассчитать время погрузки</a>
-            {{ end }}
+        <div class="fields">
+            <div class="fields_item fields__comment">
+                <p>Комментарий</p>
+                <input class="fields__comment--input" type="text" name="comment--input" value=" {{.request.Comment}} ">
+            </div>
+            <div class="fields_item fields__result">
+                <p>Общее время погрузки</p>
+                <input class="fields__result--input" type="text" name="result--input" value=" {{.request.LoadingTime}} ">
+            </div>
         </div>
         
     </div>

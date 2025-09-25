@@ -2,14 +2,12 @@ package repository
 
 import (
 	"fmt"
-	"math"
-	"strconv"
 	"strings"
 )
 
 type Repository struct {
 	Ships    []Ship
-	Requests map[int]Request // Изменил на map[int]Request
+	Requests map[int]Request
 }
 
 type Ship struct {
@@ -37,6 +35,7 @@ type Request struct {
 	Containers20ftCount int
 	Containers40ftCount int
 	Comment             string
+	LoadingTime         string
 }
 
 func NewRepository() (*Repository, error) {
@@ -92,15 +91,30 @@ func NewRepository() (*Repository, error) {
 			Containers: 11878,
 			Features:   "первый в мире контейнеровоз, вмещающий более 23 000 TEU, двигатель MAN B&W 11G95ME-C9.5, класс DNV GL",
 			PhotoURL:   "msc-gulsun.png",
-		},
-	}
+		}}
 
 	if len(ships) == 0 {
 		return nil, fmt.Errorf("массив пустой")
 	}
 
 	requests := make(map[int]Request)
-	requests[1] = Request{ID: 1, Ships: []ShipInRequest{}}
+	requests[1] = Request{
+		ID:                  1,
+		Containers20ftCount: 50,
+		Containers40ftCount: 25,
+		Comment:             "Срочная погрузка для экспорта в Китай",
+		LoadingTime:         "",
+		Ships: []ShipInRequest{
+			{
+				Ship:  ships[0], // Ever Ace
+				Count: 2,
+			},
+			{
+				Ship:  ships[1], // FESCO Diomid
+				Count: 1,
+			},
+		},
+	}
 
 	return &Repository{Ships: ships, Requests: requests}, nil
 }
@@ -181,7 +195,7 @@ func (r *Repository) GetShip(id int) (Ship, error) {
 			return ship, nil
 		}
 	}
-	return Ship{}, fmt.Errorf("Контейнеровоз не найден")
+	return Ship{}, fmt.Errorf("контейнеровоз не найден")
 }
 
 func (r *Repository) GetShipsByName(name string) ([]Ship, error) {
@@ -200,45 +214,9 @@ func (r *Repository) GetShipsByName(name string) ([]Ship, error) {
 	return result, nil
 }
 
-func (r *Repository) GetShipsByCapacity(capacity string) ([]Ship, error) {
-	ships, err := r.GetShips()
-	if err != nil {
-		return []Ship{}, err
-	}
-	searchCapacity, err := strconv.ParseFloat(capacity, 32)
-	if err != nil {
-		return []Ship{}, nil
-	}
-
-	var result []Ship
-	for _, ship := range ships {
-		diff := math.Abs(float64(ship.Capacity) - searchCapacity)
-		if diff <= searchCapacity*0.30 {
-			result = append(result, ship)
-		}
-	}
-	return result, nil
-}
-
 func (r *Repository) GetRequest(id int) (Request, error) {
 	if request, ok := r.Requests[id]; ok {
 		return request, nil
 	}
-	return Request{}, fmt.Errorf("заявка с id=%d не найдена", id)
-}
-
-func (r *Repository) RemoveShipFromRequest(requestID int, shipID int) error {
-	request, ok := r.Requests[requestID]
-	if !ok {
-		return fmt.Errorf("заявка с id=%d не найдена", requestID)
-	}
-	for i, shipInRequest := range request.Ships {
-		if shipInRequest.Ship.ID == shipID {
-			request.Ships = append(request.Ships[:i], request.Ships[i+1:]...)
-			r.Requests[requestID] = request
-			return nil
-		}
-	}
-
-	return fmt.Errorf("корабль с id=%d не найден в заявке", shipID)
+	return Request{}, fmt.Errorf("заявка c id=%d не найдена", id)
 }
