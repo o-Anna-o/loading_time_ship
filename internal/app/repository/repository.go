@@ -103,7 +103,7 @@ func NewRepository() (*Repository, error) {
 		Containers20ftCount: 50,
 		Containers40ftCount: 25,
 		Comment:             "Срочная погрузка для экспорта в Китай",
-		LoadingTime:         "",
+		LoadingTime:         "8 часов 30 минут",
 		Ships: []ShipInRequest{
 			{
 				Ship:  ships[0], // Ever Ace
