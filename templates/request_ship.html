@@ -1,33 +1,33 @@
 <html lang="en">
 <head>
     <title>Расчёт времени погрузки контейнеров</title>
-    <link rel="stylesheet" href="/static/styles/request_style.css">
+    <link rel="stylesheet" href="/styles/request_ship_style.css">
 </head>
 <body>
     <header>
         <h1>
-            <a href="/ships"><img class="home-img header-icon" src="/static/img/home-img.svg" alt="home"></a>
+            <a href="/ships"><img class="home-img header-icon" src="/img/home-img.svg" alt="home"></a>
         </h1>
     </header>
     <div class="request">
         
         <h1>Расчёт времени погрузки контейнеров</h1>  
-        
+
         <div class="request__counts">
             <div class="request__cnt request__cnt-20-f">
                 <p>Количество 20-футовых контейнеров</p>
-                <input class="request__cnt-input request__cnt-20-f" type="number" name="containers_20ft" placeholder="Введите целое число" value=" {{.request.Containers20ftCount}} ">
+                <input class="request__cnt-input request__cnt-20-f" type="number" name="containers_20ft" placeholder="Введите целое число" value=" {{.request_ship.Containers20ftCount}} ">  <!-- ← request_ship -->
             </div>
             <div class="request__cnt request__cnt-40-f">
                 <p>Количество 40-футовых контейнеров</p>
-                <input class="request__cnt-input  request__cnt-40-f" type="number" name="containers_40ft" placeholder="Введите целое число" value=" {{.request.Containers40ftCount}} ">
+                <input class="request__cnt-input  request__cnt-40-f" type="number" name="containers_40ft" placeholder="Введите целое число" value=" {{.request_ship.Containers40ftCount}} ">  <!-- ← request_ship -->
             </div>
         </div>
         
         <h2>Выбранные контейнеровозы</h2>
         <div class="request__cards">
-            {{ if .request.Ships }}
-                {{ range .request.Ships }}
+            {{ if .request_ship.Ships }}  
+                {{ range .request_ship.Ships }} 
                 <div class="request__card">
                     <h2 class="request__card__title">{{ .Ship.Name }}</h2>
                     <img class="request__card__ship-card__img" src="http://localhost:9000/loading-time-img/img/{{.Ship.PhotoURL}}" 
@@ -40,11 +40,13 @@
                         <p><b>Краны:</b> {{ .Ship.Cranes }} одновременно</p>
                     </div>
                     <div class="ship-card__other">
-                        <a class="ship-card__other-item ship-card__other-btn btn" href="/request/{{$.request.ID}}/remove/{{.Ship.ID}}"> Удалить </a>
+                        <form action="/request_ship/{{$.request_ship.RequestShipID}}/remove/{{.Ship.ShipID}}" method="POST" style="display: inline;">  <!-- ← RequestShipID и Ship.ShipID -->
+                            <button type="submit" class="ship-card__other-item ship-card__other-btn btn">Удалить</button>
+                        </form>
 
                         <div class="ship-card__other-item ship-card__cnt">
                             <p>Количество</p>
-                            <input class="ship-card__cnt-input" type="text" name="ship-card__time-input" placeholder="" value=" {{ .Count }} ">
+                            <input class="ship-card__cnt-input" type="text" name="ship-card__time-input" placeholder="" value=" {{ .ShipsCount }} ">  <!-- ← ShipsCount -->
                         </div>
                     </div>
                 </div>
@@ -58,14 +60,28 @@
         <div class="fields">
             <div class="fields_item fields__comment">
                 <p>Комментарий</p>
-                <input class="fields__comment--input" type="text" name="comment--input" value=" {{.request.Comment}} ">
+                <input class="fields__comment--input" type="text" name="comment--input" value=" {{.request_ship.Comment}} "> 
             </div>
             <div class="fields_item fields__result">
                 <p>Общее время погрузки</p>
-                <input class="fields__result--input" type="text" name="result--input" value=" {{.request.LoadingTime}} ">
+                <input class="fields__result--input" type="text" name="result--input" value=" {{.request_ship.LoadingTime}} "> 
             </div>
         </div>
-        
+
+        <div class="ship-card__btns">
+            <a href="/ships" class="ship-card__btn beige-btn btn">Добавить контейнеровоз</a>
+            {{ if .request_ship.Ships }}  
+                <a href="/ships" class="ship-card__btn beige-btn btn">Рассчитать время погрузки</a>
+            {{ end }}
+        </div>
+
+        <div class="request-actions">
+        <form action="/request_ship/delete/{{.request_ship.RequestShipID}}" method="POST"> 
+            <button type="submit" class="btn beige-btn">
+                Удалить всю заявку
+            </button>
+        </form>
+</div>
     </div>
 </body>
 </html>

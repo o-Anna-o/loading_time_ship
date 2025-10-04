@@ -162,3 +162,13 @@ input {
     padding: 14px 32px;
     text-align: center;
 }
+
+.request-actions .danger-btn.with-icon {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.request-actions .danger-btn.with-icon::before {
+    font-size: 14px;
+}

@@ -127,7 +127,6 @@ ul li a {
     width: 489px;
     padding: 14px 32px;
 }
-
 .cart-link {
     position: relative;
     display: inline-block; /* чтобы позиционировать дочерние элементы */
@@ -150,4 +149,3 @@ ul li a {
     justify-content: center;
     line-height: 1;
 }
-

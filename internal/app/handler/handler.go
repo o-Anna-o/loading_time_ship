@@ -2,6 +2,7 @@ package handler
 
 import (
 	"context"
+	"loading_time/internal/app/ds"
 	"loading_time/internal/app/repository"
 	"net/http"
 	"strconv"
@@ -18,7 +19,6 @@ type Handler struct {
 }
 
 func NewHandler(r *repository.Repository) *Handler {
-	// Инициализация MinIO
 	endpoint := "localhost:9000"
 	accessKey := "minio_login_001"
 	secretKey := "minio_login_001"
@@ -38,7 +38,6 @@ func NewHandler(r *repository.Repository) *Handler {
 
 	logrus.Info("MinIO connected successfully")
 
-	// проверка подключения к бакету loading-time-img
 	bucketName := "loading-time-img"
 	exists, err := client.BucketExists(context.Background(), bucketName)
 	if err != nil {
@@ -55,80 +54,45 @@ func NewHandler(r *repository.Repository) *Handler {
 	}
 }
 
-func (h *Handler) GetShips(ctx *gin.Context) {
-	var ships []repository.Ship
-	var err error
+// RegisterHandler регистрирует маршруты
+func (h *Handler) RegisterHandler(router *gin.Engine) {
+	// GET маршруты
+	router.GET("/ships", h.GetShips)
+	router.GET("/ship/:id", h.GetShip)
 
-	nameQuery := ctx.Query("name_query")
-
-	if nameQuery == "" {
-		ships, err = h.Repository.GetShips()
-	} else {
-		ships, err = h.Repository.GetShipsByName(nameQuery)
-	}
-
-	if err != nil {
-		logrus.Error(err)
-	}
-	// для подсчета кораблей в заявке
-	request, err := h.Repository.GetRequest(1)
-	requestCount := 0
-	if err == nil {
-		for _, shipInRequest := range request.Ships {
-			requestCount += shipInRequest.Count
+	router.GET("/request_ship", func(ctx *gin.Context) {
+		request_ship, err := h.Repository.GetOrCreateUserDraft(1)
+		if err != nil {
+			logrus.Error(err)
+			ctx.HTML(http.StatusInternalServerError, "request_ship.html", gin.H{
+				"request_ship": ds.RequestShip{},
+				"error":        "Не удалось создать черновик",
+			})
+			return
 		}
-	}
-
-	ctx.HTML(http.StatusOK, "index.html", gin.H{
-		"ships":         ships,
-		"name_query":    nameQuery,
-		"request_count": requestCount, // количество кораблей в заявке
+		ctx.Redirect(http.StatusFound, "/request_ship/"+strconv.Itoa(request_ship.RequestShipID))
 	})
+
+	router.GET("/request_ship/:id", h.GetRequestShip)
+
+	// POST маршруты
+	router.POST("/request_ship/add/:ship_id", h.AddShipToRequestShip)
+	router.POST("/request_ship/delete/:id", h.DeleteRequestShip)
+	router.POST("/request_ship/:id/remove/:ship_id", h.RemoveShipFromRequestShip)
 }
 
-func (h *Handler) GetShip(ctx *gin.Context) {
-	idStr := ctx.Param("id")
-	id, err := strconv.Atoi(idStr)
-	if err != nil {
-		logrus.Error(err)
-	}
-
-	ship, err := h.Repository.GetShip(id)
-	if err != nil {
-		logrus.Error(err)
-	}
-
-	ctx.HTML(http.StatusOK, "ship.html", gin.H{
-		"ship": ship,
-	})
+// RegisterStatic регистрирует статику
+func (h *Handler) RegisterStatic(router *gin.Engine) {
+	router.LoadHTMLGlob("templates/*")
+	router.Static("/styles", "./resources/styles")
+	router.Static("/img", "./resources/img")
 }
 
-func (h *Handler) GetRequest(ctx *gin.Context) {
-	idStr := ctx.Param("id")
-
-	if idStr == "" {
-		ctx.HTML(http.StatusOK, "request.html", gin.H{
-			"request": repository.Request{
-				ID:    0,
-				Ships: []repository.ShipInRequest{},
-			},
-		})
-		return
-	}
-
-	requestID, err := strconv.Atoi(idStr)
-	if err != nil {
-		ctx.String(http.StatusBadRequest, "Invalid request ID")
-		return
-	}
-
-	request, err := h.Repository.GetRequest(requestID)
-	if err != nil {
-		ctx.String(http.StatusNotFound, err.Error())
-		return
-	}
-
-	ctx.HTML(http.StatusOK, "request.html", gin.H{
-		"request": request,
+// errorHandler
+func (h *Handler) errorHandler(ctx *gin.Context, errorStatusCode int, err error) {
+	logrus.Error(err.Error())
+	ctx.JSON(errorStatusCode, gin.H{
+		"status":      "error",
+		"description": err.Error(),
 	})
 }
