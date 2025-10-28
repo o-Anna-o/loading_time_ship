@@ -10,7 +10,7 @@ import (
 func (r *Repository) GetRequestShip(id int) (ds.RequestShip, error) {
 	request_ship := ds.RequestShip{}
 	// обязательно проверяем ошибки, и если они появились - передаем выше, то есть хендлеру
-	err := r.db.Preload("Ships.Ship").Where("id = ?", id).First(&request_ship).Error
+	err := r.db.Preload("Ships.Ship").Preload("User").Where("id = ?", id).First(&request_ship).Error
 	if err != nil {
 		return ds.RequestShip{}, err
 	}
@@ -18,22 +18,22 @@ func (r *Repository) GetRequestShip(id int) (ds.RequestShip, error) {
 }
 
 // GetOrCreateUserDraft - перейти или создать черновик
-func (r *Repository) GetOrCreateUserDraft(dummyUserID int) (ds.RequestShip, error) {
+func (r *Repository) GetOrCreateUserDraft(userID int) (ds.RequestShip, error) {
 	var requestShip ds.RequestShip
 
 	// Ищем существующий черновик для данного пользователя
-	err := r.db.Preload("Ships.Ship").Where("status = ? AND user_id = ?", "черновик", dummyUserID).First(&requestShip).Error
+	err := r.db.Preload("Ships.Ship").Preload("User").Where("status = ? AND user_id = ?", "черновик", userID).First(&requestShip).Error
 	if err == nil {
 		return requestShip, nil // черновик найден
 	}
 	if err != gorm.ErrRecordNotFound {
-		return ds.RequestShip{}, err // реальная ошибка
+		return ds.RequestShip{}, err
 	}
 
 	// Создаем новый черновик
 	requestShip = ds.RequestShip{
 		Status:       "черновик",
-		UserID:       dummyUserID,
+		UserID:       userID,
 		CreationDate: time.Now(),
 	}
 
@@ -83,7 +83,7 @@ func (r *Repository) DeleteRequestShipSQL(requestShipID int) error {
 // GetRequestShipExcludingDeleted - получить заявку исключая удаленные (через ORM)
 func (r *Repository) GetRequestShipExcludingDeleted(id int) (ds.RequestShip, error) {
 	var requestShip ds.RequestShip
-	err := r.db.Preload("Ships.Ship").Where("request_ship_id = ? AND status != ?", id, "удалён").First(&requestShip).Error
+	err := r.db.Preload("Ships.Ship").Preload("User").Where("request_ship_id = ? AND status != ?", id, "удалён").First(&requestShip).Error // добавили Preload("User")
 	if err != nil {
 		return ds.RequestShip{}, err
 	}
@@ -148,11 +148,12 @@ func (r *Repository) GetRequestShipsFiltered(startDate, endDate, status string) 
 		query = query.Where("status = ?", status)
 	}
 
-	err := query.Preload("Ships").Find(&requestShips).Error
+	err := query.Preload("Ships").Preload("User").Find(&requestShips).Error // добавили Preload("User")
 	return requestShips, err
 }
 
 //_______________________________________________________________________________________________________
+
 // для REST API
 
 // UpdateRequestShipStatus - обновляет статус заявки

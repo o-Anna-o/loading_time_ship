@@ -30,7 +30,7 @@ func (h *Handler) GetShips(ctx *gin.Context) {
 	requestShipID := 0
 
 	requestShip, err := h.Repository.GetOrCreateUserDraft(fixedUserID)
-	if err == nil { // Убрана проверка requestShip != nil, так как struct не nil
+	if err == nil {
 		logrus.Infof("Найдена заявка ID=%d, количество кораблей в заявке: %d", requestShip.RequestShipID, len(requestShip.Ships))
 		for i, shipInRequest := range requestShip.Ships {
 			logrus.Infof("Корабль %d: ID=%d, количество: %d", i, shipInRequest.ShipID, shipInRequest.ShipsCount)

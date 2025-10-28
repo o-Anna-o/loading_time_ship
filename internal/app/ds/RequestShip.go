@@ -4,11 +4,13 @@ import (
 	"time"
 )
 
+// @Schema(description="RequestShip model representing a shipping request")
 type RequestShip struct {
 	RequestShipID       int             `gorm:"primaryKey;column:request_ship_id"`
 	Status              string          `gorm:"column:status"`
 	CreationDate        time.Time       `gorm:"column:creation_date"`
 	UserID              int             `gorm:"column:user_id"`
+	User                User            `gorm:"foreignKey:UserID"` // автозаполнение пользователя в заявках
 	CompletionDate      *time.Time      `gorm:"column:completion_date"`
 	Containers20ftCount int             `gorm:"column:containers_20ft_count"`
 	Containers40ftCount int             `gorm:"column:containers_40ft_count"`

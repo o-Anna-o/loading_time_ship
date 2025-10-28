@@ -1,5 +1,6 @@
 package ds
 
+// @Schema(description="Ship model representing a container ship")
 type Ship struct {
 	ShipID      int     `gorm:"primaryKey;column:ship_id"`
 	Name        string  `gorm:"column:name"`
@@ -11,7 +12,6 @@ type Ship struct {
 	Containers  int     `gorm:"column:containers"`
 	Description string  `gorm:"column:description"`
 	PhotoURL    string  `gorm:"column:photo_url"`
-	IsActive    bool    `gorm:"column:is_active"`
 }
 
 func (Ship) TableName() string {

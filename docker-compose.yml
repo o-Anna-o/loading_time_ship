@@ -58,7 +58,7 @@ services:
       - minio3
       - minio4
 
-  # POSTGRES 
+  # POSTGRES
   postgres:
     image: postgres:15.0
     env_file:
@@ -100,7 +100,7 @@ services:
       PGDATA: "/var/lib/postgresql/data/pgdata"
     volumes:
       - ./InitDatabase:/docker-entrypoint-initdb.d
-      - postgres_data:/var/lib/postgresql/data 
+      - postgres_data:/var/lib/postgresql/data
     ports:
       - "${DB_PORT}:5432"
     healthcheck:
@@ -116,7 +116,20 @@ services:
           cpus: '3'
           memory: 4G
 
-  # ADMINER 
+  # REDIS 
+  redis:
+    image: redis:7.0
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ADMINER
   adminer:
     image: adminer
     ports:
@@ -136,3 +149,4 @@ volumes:
   data4-1:
   data4-2:
   postgres_data:
+  redis_data:  
