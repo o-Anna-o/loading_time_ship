@@ -220,7 +220,7 @@ func (h *ShipHandler) DeleteShipAPI(c *gin.Context) {
 
 // AddShipToRequestShipAPI - POST /api/ships/:id/add-to-ship-bucket - добавить корабль в заявку
 
-// @Summary Add ship to request
+// @Summary Добавить корабль в заявку
 // @Description Add a ship to a user's request draft
 // @Tags ships
 // @Produce json
@@ -313,7 +313,8 @@ func (h *ShipHandler) AddShipToRequestShipAPI(c *gin.Context) {
 }
 
 // AddShipImageAPI - POST /api/ships/:id/image - добавление изображения
-// @Summary Upload ship image
+
+// @Summary Добавление изображения
 // @Description Upload an image for a specific ship
 // @Tags ships
 // @Accept multipart/form-data

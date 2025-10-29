@@ -126,7 +126,7 @@ paths:
           description: 'error: string'
           schema:
             type: object
-      summary: Update request fields
+      summary: Изменение полей заявки
       tags:
       - request_ships
   /api/request-ships/{id}/completion:
@@ -162,7 +162,7 @@ paths:
           description: 'error: string'
           schema:
             type: object
-      summary: Complete or reject a request
+      summary: Завершить или отклонить заявку (модератор)
       tags:
       - request_ships
   /api/request_ship:
@@ -194,7 +194,7 @@ paths:
           description: 'error: string'
           schema:
             type: object
-      summary: Get list of shipping requests
+      summary: Получить список заявок на расчет времени погрузки
       tags:
       - request_ships
   /api/request_ship/{id}:
@@ -221,7 +221,7 @@ paths:
           description: 'error: string'
           schema:
             type: object
-      summary: Delete a request
+      summary: Удаление всей заявки
       tags:
       - request_ships
     get:
@@ -249,7 +249,7 @@ paths:
           description: 'error: string'
           schema:
             type: object
-      summary: Get a single request
+      summary: Одна заявка на расчет времени погрузки
       tags:
       - request_ships
   /api/request_ship/{id}/formation:
@@ -280,7 +280,7 @@ paths:
           description: 'error: string'
           schema:
             type: object
-      summary: Form a request
+      summary: Сформировать заявку на расчет времени погрузки
       tags:
       - request_ships
   /api/request_ship/{id}/ships/{ship_id}:
@@ -312,7 +312,7 @@ paths:
           description: 'status: string, description: string'
           schema:
             type: object
-      summary: Delete ship from request
+      summary: Удаление корабля из заявки
       tags:
       - request_ships
     put:
@@ -354,7 +354,7 @@ paths:
           description: 'error: string'
           schema:
             type: object
-      summary: Update ship count in request
+      summary: Обновление количества кораблей в заявке
       tags:
       - request_ships
   /api/requests/basket:
@@ -371,7 +371,7 @@ paths:
           description: 'error: string'
           schema:
             type: object
-      summary: Get request basket
+      summary: Получить корзину запросов
       tags:
       - request_ships
   /api/ships:
@@ -548,7 +548,7 @@ paths:
           description: 'status: string, description: string'
           schema:
             type: object
-      summary: Add ship to request
+      summary: Добавить корабль в заявку
       tags:
       - ships
   /api/ships/{id}/image:
@@ -591,7 +591,7 @@ paths:
           description: 'message: string'
           schema:
             type: object
-      summary: Upload ship image
+      summary: Добавление изображения
       tags:
       - ships
   /api/users/login:

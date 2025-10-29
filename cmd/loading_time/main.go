@@ -2,6 +2,11 @@ package main
 
 // go run cmd/loading_time/main.go
 
+// как запустить:
+// swag init -g cmd/loading_time/main.go
+// go run cmd/loading_time/main.go
+// и перейти на http://localhost:8080/swagger/index.html
+
 import (
 	"fmt"
 	"loading_time/internal/app/config"

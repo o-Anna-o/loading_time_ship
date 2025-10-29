@@ -27,7 +27,7 @@ const docTemplate = `{
                 "tags": [
                     "request_ships"
                 ],
-                "summary": "Update request fields",
+                "summary": "Изменение полей заявки",
                 "parameters": [
                     {
                         "type": "integer",
@@ -88,7 +88,7 @@ const docTemplate = `{
                 "tags": [
                     "request_ships"
                 ],
-                "summary": "Complete or reject a request",
+                "summary": "Завершить или отклонить заявку (модератор)",
                 "parameters": [
                     {
                         "type": "integer",
@@ -142,7 +142,7 @@ const docTemplate = `{
                 "tags": [
                     "request_ships"
                 ],
-                "summary": "Get list of shipping requests",
+                "summary": "Получить список заявок на расчет времени погрузки",
                 "parameters": [
                     {
                         "type": "string",
@@ -191,7 +191,7 @@ const docTemplate = `{
                 "tags": [
                     "request_ships"
                 ],
-                "summary": "Get a single request",
+                "summary": "Одна заявка на расчет времени погрузки",
                 "parameters": [
                     {
                         "type": "integer",
@@ -230,7 +230,7 @@ const docTemplate = `{
                 "tags": [
                     "request_ships"
                 ],
-                "summary": "Delete a request",
+                "summary": "Удаление всей заявки",
                 "parameters": [
                     {
                         "type": "integer",
@@ -271,7 +271,7 @@ const docTemplate = `{
                 "tags": [
                     "request_ships"
                 ],
-                "summary": "Form a request",
+                "summary": "Сформировать заявку на расчет времени погрузки",
                 "parameters": [
                     {
                         "type": "integer",
@@ -321,7 +321,7 @@ const docTemplate = `{
                 "tags": [
                     "request_ships"
                 ],
-                "summary": "Update ship count in request",
+                "summary": "Обновление количества кораблей в заявке",
                 "parameters": [
                     {
                         "type": "integer",
@@ -381,7 +381,7 @@ const docTemplate = `{
                 "tags": [
                     "request_ships"
                 ],
-                "summary": "Delete ship from request",
+                "summary": "Удаление корабля из заявки",
                 "parameters": [
                     {
                         "type": "integer",
@@ -429,7 +429,7 @@ const docTemplate = `{
                 "tags": [
                     "request_ships"
                 ],
-                "summary": "Get request basket",
+                "summary": "Получить корзину запросов",
                 "responses": {
                     "200": {
                         "description": "data: {request_ship_id: int, ships_count: int}",
@@ -676,7 +676,7 @@ const docTemplate = `{
                 "tags": [
                     "ships"
                 ],
-                "summary": "Add ship to request",
+                "summary": "Добавить корабль в заявку",
                 "parameters": [
                     {
                         "type": "integer",
@@ -726,7 +726,7 @@ const docTemplate = `{
                 "tags": [
                     "ships"
                 ],
-                "summary": "Upload ship image",
+                "summary": "Добавление изображения",
                 "parameters": [
                     {
                         "type": "integer",

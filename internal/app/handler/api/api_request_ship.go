@@ -16,7 +16,7 @@ type RequestShipHandler struct {
 
 // GetRequestShipBasketAPI - GET /api/requests/basket - иконка корзины
 
-// @Summary Get request basket
+// @Summary Получить корзину запросов
 // @Description Retrieve the count of ships in the user's draft request
 // @Tags request_ships
 // @Produce json
@@ -49,7 +49,7 @@ func (h *RequestShipHandler) GetRequestShipBasketAPI(c *gin.Context) {
 
 // GetRequestShipsAPI - GET /api/request_ship - список заявок
 
-// @Summary Get list of shipping requests
+// @Summary Получить список заявок на расчет времени погрузки
 // @Description Retrieve a list of requests with optional filters
 // @Tags request_ships
 // @Produce json
@@ -78,7 +78,7 @@ func (h *RequestShipHandler) GetRequestShipsAPI(c *gin.Context) {
 
 // GetRequestShipAPI - GET /api/request_ship/:id - одна заявка с услугами
 
-// @Summary Get a single request
+// @Summary Одна заявка на расчет времени погрузки
 // @Description Retrieve details of a specific request with its ships
 // @Tags request_ships
 // @Produce json
@@ -130,7 +130,7 @@ func (h *RequestShipHandler) GetRequestShipAPI(c *gin.Context) {
 }
 
 // UpdateRequestShipAPI - PUT /api/request-ships/:id - изменения полей заявки
-// @Summary Update request fields
+// @Summary Изменение полей заявки
 // @Description Update fields of an existing request
 // @Tags request_ships
 // @Accept json
@@ -189,7 +189,7 @@ func (h *RequestShipHandler) UpdateRequestShipAPI(c *gin.Context) {
 
 // FormRequestShipAPI - PUT /api/request_ship/:id/formation - сформировать создателем + расчёт времени
 
-// @Summary Form a request
+// @Summary Сформировать заявку на расчет времени погрузки
 // @Description Finalize a draft request by the creator
 // @Tags request_ships
 // @Produce json
@@ -263,7 +263,7 @@ func (h *RequestShipHandler) FormRequestShipAPI(c *gin.Context) {
 
 // CompleteRequestShipAPI - POST /api/request-ships/:id/completion - завершить/отклонить модератором
 
-// @Summary Complete or reject a request
+// @Summary Завершить или отклонить заявку (модератор)
 // @Description Allow moderator to complete or reject a formed request
 // @Tags request_ships
 // @Produce json
@@ -376,7 +376,7 @@ func (h *RequestShipHandler) CompleteRequestShipAPI(c *gin.Context) {
 
 // DeleteShipFromRequestShipAPI - DELETE /api/request_ship/:id/ships/:ship_id - удаление корабля из заявки
 
-// @Summary Delete ship from request
+// @Summary Удаление корабля из заявки
 // @Description Remove a ship from a specific request
 // @Tags request_ships
 // @Produce json
@@ -431,7 +431,7 @@ func (h *RequestShipHandler) DeleteShipFromRequestShipAPI(c *gin.Context) {
 
 // UpdateShipInRequestAPI - PUT /api/request_ship/:id/ships/:ship_id - обновление количества кораблей в заявке
 
-// @Summary Update ship count in request
+// @Summary Обновление количества кораблей в заявке
 // @Description Update the number of ships in a specific request
 // @Tags request_ships
 // @Accept json
@@ -510,7 +510,7 @@ func (h *RequestShipHandler) UpdateShipInRequestAPI(c *gin.Context) {
 
 // DeleteRequestShipAPI - DELETE /api/request_ship/:id - удаление всей заявки
 
-// @Summary Delete a request
+// @Summary Удаление всей заявки
 // @Description Remove an entire request from the system
 // @Tags request_ships
 // @Produce json

@@ -15,13 +15,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-// NOTE: этот файл реализует: CreateUser, GetUserByLogin, RegisterUser,
-// Authenticate, LoginUser, SaveJWTToken, SaveSession и работу с Redis.
-// Он ориентирован на структуру Repository, у которой должны быть поля:
-// db *gorm.DB, redisClient *redis.Client, jwtKey string
-// (см. инструкцию внизу, если нужно инициализировать redisClient/jwtKey).
-
-// GetUserByLogin returns user by login
+// GetUserByLogin — возвращает пользователя по логину
 func (r *Repository) GetUserByLogin(login string) (*ds.User, error) {
 	user := &ds.User{}
 	err := r.db.Where("login = ?", login).First(user).Error
@@ -31,7 +25,7 @@ func (r *Repository) GetUserByLogin(login string) (*ds.User, error) {
 	return user, nil
 }
 
-// CreateUser hashes password and saves new user
+// CreateUser — хэширует пароль и сохраняет нового пользователя
 func (r *Repository) CreateUser(user *ds.User) error {
 	// Проверка: не пришёл ли уже хеш вместо пароля
 	if len(user.Password) > 0 && strings.HasPrefix(user.Password, "$2a$") {
@@ -49,7 +43,7 @@ func (r *Repository) CreateUser(user *ds.User) error {
 	return r.db.Create(user).Error
 }
 
-// RegisterUser checks uniqueness and creates user
+// RegisterUser — проверяет уникальность и создает пользователя
 func (r *Repository) RegisterUser(user ds.User) (ds.User, error) {
 	// проверка существует ли уже
 	exist, err := r.GetUserByLogin(user.Login)
@@ -71,7 +65,7 @@ func (r *Repository) RegisterUser(user ds.User) (ds.User, error) {
 	return *created, nil
 }
 
-// Authenticate: возвращает пользователя, если логин+пароль верны
+// Authenticate — возвращает пользователя, если логин И пароль верны
 func (r *Repository) Authenticate(login, password string) (*ds.User, error) {
 	fmt.Printf("DEBUG: Authenticate called for login=%s\n", login)
 
@@ -89,7 +83,7 @@ func (r *Repository) Authenticate(login, password string) (*ds.User, error) {
 	return user, nil
 }
 
-// LoginUser: полноценный flow — проверка, генерация JWT, сохранение токена и сессии
+// LoginUser — полноценный flow — проверка, генерация JWT, сохранение токена и сессии
 func (r *Repository) LoginUser(login, password string) (jwtToken string, sessionID string, err error) {
 	fmt.Printf("DEBUG: LoginUser called. db=%v redis=%v jwtKeyLen=%d\n", r.db, r.redisClient, len(r.jwtKey))
 
@@ -149,7 +143,7 @@ func (r *Repository) LoginUser(login, password string) (jwtToken string, session
 	return tokenStr, sessionID, nil
 }
 
-// SaveJWTToken stores token in redis with TTL
+// SaveJWTToken хранит токен в redis с помощью TTL
 func (r *Repository) SaveJWTToken(userID int, token string) error {
 	key := "jwt:" + strconv.Itoa(userID)
 	err := r.redisClient.Set(context.Background(), key, token, 24*time.Hour).Err()
@@ -161,7 +155,7 @@ func (r *Repository) SaveJWTToken(userID int, token string) error {
 	return nil
 }
 
-// SaveSession stores session map in redis
+// SaveSession — сохраняет карту сеанса в redis
 func (r *Repository) SaveSession(sessionID string, userID int, role string, ttl time.Duration) error {
 	key := "sess:" + sessionID
 	data := map[string]interface{}{
@@ -179,8 +173,6 @@ func (r *Repository) SaveSession(sessionID string, userID int, role string, ttl 
 	fmt.Printf("DEBUG: SaveSession saved key=%s ttl=%v\n", key, ttl)
 	return nil
 }
-
-//__________________________________________________________________________________________
 
 // GetUserByID — получить пользователя по ID
 func (r *Repository) GetUserByID(userID int) (*ds.User, error) {
