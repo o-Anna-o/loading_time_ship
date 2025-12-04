@@ -81,7 +81,7 @@ const docTemplate = `{
         },
         "/api/request-ships/{id}/completion": {
             "post": {
-                "description": "Allow moderator to complete or reject a formed request",
+                "description": "Allow port_operator to complete or reject a formed request",
                 "produces": [
                     "application/json"
                 ],
@@ -1131,7 +1131,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "role": {
-                    "description": "\"guest\" | \"creator\" | \"moderator\"",
+                    "description": "\"guest\" | \"creator\" | \"port_operator\"",
                     "type": "string"
                 },
                 "userID": {

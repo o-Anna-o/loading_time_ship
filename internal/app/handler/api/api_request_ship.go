@@ -264,7 +264,7 @@ func (h *RequestShipHandler) FormRequestShipAPI(c *gin.Context) {
 // CompleteRequestShipAPI - POST /api/request-ships/:id/completion - завершить/отклонить модератором
 
 // @Summary Завершить или отклонить заявку (модератор)
-// @Description Allow moderator to complete or reject a formed request
+// @Description Allow port_operator to complete or reject a formed request
 // @Tags request_ships
 // @Produce json
 // @Param id path int true "Request ID"
@@ -315,7 +315,7 @@ func (h *RequestShipHandler) CompleteRequestShipAPI(c *gin.Context) {
 		return
 	}
 
-	const moderatorID = 1 // Фиксированный модератор
+	const port_operatorID = 1 // Фиксированный модератор
 
 	if action == "complete" {
 		// Рассчитываем время погрузки (бизнес-логика из задания)
@@ -334,7 +334,7 @@ func (h *RequestShipHandler) CompleteRequestShipAPI(c *gin.Context) {
 		}
 
 		// Завершаем заявку с расчетом времени
-		err = h.Repository.CompleteRequestShip(id, moderatorID, "завершен", loadingTime)
+		err = h.Repository.CompleteRequestShip(id, port_operatorID, "завершен", loadingTime)
 		if err != nil {
 			logrus.Errorf("CompleteRequestShipAPI: Failed to complete request_ship_id=%d: %v", id, err)
 			c.JSON(http.StatusInternalServerError, gin.H{
@@ -351,7 +351,7 @@ func (h *RequestShipHandler) CompleteRequestShipAPI(c *gin.Context) {
 
 	} else if action == "reject" {
 		// Отклоняем заявку
-		err = h.Repository.CompleteRequestShip(id, moderatorID, "отклонен", 0)
+		err = h.Repository.CompleteRequestShip(id, port_operatorID, "отклонен", 0)
 		if err != nil {
 			logrus.Errorf("CompleteRequestShipAPI: Failed to reject request_ship_id=%d: %v", id, err)
 			c.JSON(http.StatusInternalServerError, gin.H{

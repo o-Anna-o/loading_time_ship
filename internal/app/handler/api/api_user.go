@@ -1,7 +1,9 @@
 package api
 
 import (
+	"bytes"
 	"fmt"
+	"io"
 	"net/http"
 	"strings"
 	"time"
@@ -117,6 +119,11 @@ func (h *UserHandler) RegisterUserAPI(c *gin.Context) {
 // @Failure      401  {object}  map[string]string
 // @Router       /api/users/login [post]
 func (h *UserHandler) LoginUserAPI(c *gin.Context) {
+	//для поиска ошибки авторизации
+	bodyBytes, _ := io.ReadAll(c.Request.Body)
+	logrus.Infof("LoginUserAPI: Content-Type=%s, BodyRaw=%s", c.Request.Header.Get("Content-Type"), string(bodyBytes))
+	c.Request.Body = io.NopCloser(bytes.NewReader(bodyBytes))
+	//
 	var cred struct {
 		Login    string `json:"login"`
 		Password string `json:"password"`

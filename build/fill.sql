@@ -33,7 +33,7 @@ CREATE TABLE request_ship (
     creation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
     formation_date TIMESTAMP NULL, 
     completion_date TIMESTAMP NULL, 
-    moderator_id INTEGER NULL REFERENCES users(user_id),
+    port_operator_id INTEGER NULL REFERENCES users(user_id),
     user_id INTEGER NOT NULL REFERENCES users(user_id),
     
     containers_20ft_count INTEGER DEFAULT NULL,
@@ -57,7 +57,7 @@ WHERE status = 'черновик';
 
 -- 6. Тестовые пользователи
 INSERT INTO users (fio, login, password, role) VALUES 
-('Агапова Анна Денисовна', 'login001', 'password', 'moderator');
+('Агапова Анна Денисовна', 'login001', 'password', 'port_operator');
 
 INSERT INTO users (fio, login, contacts, cargo_weight, containers_20ft_count, containers_40ft_count, password, role) VALUES 
 ('Зятева Оля', 'newuser123', 'olia@gmail.com', 100.50, 2, 1, 'pass123', 'creator');
@@ -68,7 +68,7 @@ VALUES
 
 -- 7. Все контейнеровозы 
 INSERT INTO ships (name, description, capacity, length, width, draft, cranes, containers, photo_url) VALUES 
-('Ever Ace', 'самый большой в мире, двигатель Wartsila 70950 кВт',, 23992, 400, 61.53, 17.0, 6, 11996, 'ever-ace.png'),
+('Ever Ace', 'самый большой в мире, двигатель Wartsila 70950 кВт', 23992, 400, 61.53, 17.0, 6, 11996, 'ever-ace.png'),
 ('FESCO Diomid', 'построен в 2010 г., судно класса Ice1 (для Арктики), дизельный двигатель, используется на Северном морском пути', 3108, 195, 32.20, 11.0, 3, 536, 'fesco-diomid.png'),
 ('HMM Algeciras', 'двигатель MAN B&W 11G95ME-C9.5 мощностью 64 000 кВт, двойные двигатели, система рекуперации энергии, класс DNV GL', 23964, 399.9, 61.0, 16.5, 7, 11982, 'hmm-algeciras.png'),
 ('MSC Gulsun', 'первый в мире контейнеровоз, вмещающий более 23 000 TEU, двигатель MAN B&W 11G95ME-C9.5, класс DNV GL', 23756, 399.9, 61.4, 16.0, 7, 11878, 'msc-gulsun.png');

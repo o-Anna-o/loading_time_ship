@@ -44,7 +44,7 @@ func (h *Handler) SetupRoutes(router *gin.Engine) {
 		apiGroup.POST("/users/register", h.UserAPIHandler.RegisterUserAPI)
 		apiGroup.POST("/users/login", h.UserAPIHandler.LoginUserAPI)
 
-		//  2. АВТОРИЗОВАННЫЕ (creator + moderator)
+		//  2. АВТОРИЗОВАННЫЕ (creator +  port_manager)
 		authGroup := apiGroup.Group("", middleware.AuthMiddleware())
 		{
 			// УСЛУГИ
@@ -71,8 +71,8 @@ func (h *Handler) SetupRoutes(router *gin.Engine) {
 			authGroup.PUT("/users/profile", h.UserAPIHandler.UpdateUserProfileAPI)
 		}
 
-		//  3. ТОЛЬКО МОДЕРАТОР
-		modGroup := apiGroup.Group("", middleware.ModeratorMiddleware())
+		//  3. ТОЛЬКО МОДЕРАТОР — сначала парсим JWT, затем проверяем роль
+		modGroup := apiGroup.Group("", middleware.AuthMiddleware(), middleware.ModeratorMiddleware())
 		{
 			modGroup.PUT("/request_ship/:id/completion", h.RequestShipAPIHandler.CompleteRequestShipAPI)
 		}

@@ -172,12 +172,12 @@ func (r *Repository) UpdateRequestShipStatus(requestShipID int, status string) e
 }
 
 // CompleteRequestShip - завершает заявку (устанавливает модератора, статус и время)
-func (r *Repository) CompleteRequestShip(requestShipID, moderatorID int, status string, loadingTime float64) error {
+func (r *Repository) CompleteRequestShip(requestShipID, port_operatorID int, status string, loadingTime float64) error {
 	return r.db.Model(&ds.RequestShip{}).
 		Where("request_ship_id = ?", requestShipID).
 		Updates(map[string]interface{}{
 			"status":          status,
-			"moderator_id":    moderatorID,
+			"port_operator_id":    port_operatorID,
 			"completion_date": time.Now(),
 			"loading_time":    loadingTime,
 		}).Error

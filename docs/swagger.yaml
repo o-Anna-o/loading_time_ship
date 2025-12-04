@@ -79,7 +79,7 @@ definitions:
       password:
         type: string
       role:
-        description: '"guest" | "creator" | "moderator"'
+        description: '"guest" | "creator" | "port_operator"'
         type: string
       userID:
         type: integer
@@ -131,7 +131,7 @@ paths:
       - request_ships
   /api/request-ships/{id}/completion:
     post:
-      description: Allow moderator to complete or reject a formed request
+      description: Allow port_operator to complete or reject a formed request
       parameters:
       - description: Request ID
         in: path

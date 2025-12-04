@@ -7,6 +7,7 @@ import (
 	"loading_time/internal/app/utils"
 
 	"github.com/gin-gonic/gin"
+	"github.com/sirupsen/logrus"
 )
 
 // AuthMiddleware проверяет JWT и допустимые роли
@@ -24,6 +25,8 @@ func AuthMiddleware(allowedRoles ...string) gin.HandlerFunc {
 			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Invalid or expired token"})
 			return
 		}
+		// ЛОГИРУЕМ успешный разбор токена
+		logrus.Infof("AuthMiddleware: ParseJWT OK -> user_id=%v, role=%v", claims.UserID, claims.Role)
 
 		// сохраняем данные в контекст Gin
 		c.Set("user_id", claims.UserID)
@@ -48,19 +51,26 @@ func AuthMiddleware(allowedRoles ...string) gin.HandlerFunc {
 	}
 }
 
-// ModeratorMiddleware — требует роль "moderator"
+// ModeratorMiddleware — требует роль "port_operator"
 func ModeratorMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		roleAny, exists := c.Get("role")
+
 		if !exists {
+			logrus.Warn("ModeratorMiddleware: role not found in context")
 			c.AbortWithStatusJSON(http.StatusForbidden, gin.H{"error": "Moderator access required"})
 			return
 		}
 		role, ok := roleAny.(string)
-		if !ok || role != "moderator" {
+		logrus.Infof("ModeratorMiddleware: role from context=%v ok=%v", roleAny, ok)
+
+		if !ok || role != "port_operator" {
+			logrus.Warnf("ModeratorMiddleware: access denied for role=%v", role)
 			c.AbortWithStatusJSON(http.StatusForbidden, gin.H{"error": "Moderator access required"})
 			return
 		}
+
+		logrus.Infof("ModeratorMiddleware: access granted for role=%v", role)
 		c.Next()
 	}
 }

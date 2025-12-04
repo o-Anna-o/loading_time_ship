@@ -10,7 +10,7 @@ type User struct {
 	CargoWeight         float64 `gorm:"column:cargo_weight"`
 	Containers20ftCount int     `gorm:"column:containers_20ft_count"`
 	Containers40ftCount int     `gorm:"column:containers_40ft_count"`
-	Role                string  `gorm:"column:role"` // "guest" | "creator" | "moderator"
+	Role                string  `gorm:"column:role"` // "guest" | "creator" | "port_operator"
 }
 
 func (User) TableName() string {
