@@ -1,4 +1,4 @@
-import  { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { getShips } from '../api'
 import ShipListIcon from '../components/ShipListIcon'
@@ -11,15 +11,18 @@ export default function ShipPage() {
   const [ship, setShip] = useState<any>(null)
   const [loading, setLoading] = useState(true)
 
-  // buildImgSrc теперь использует просто public/img/ и fallback default.png
-const buildImgSrc = (p?: string | null, isMock = false) => {
-  if (!p) return '/default.png'
-  try { new URL(p); return p }
-  catch (e) { 
-    if (isMock) return '/' + p // просто public/filename
-    return 'http://localhost:9000/loading-time-img/img/' + p 
+ 
+  const buildImgSrc = (p?: string | null) => {
+    if (!p)
+      return `${import.meta.env.BASE_URL ?? '/loading-time-frontend/'}default.png`
+
+    if (/^https?:\/\//i.test(p)) return p
+
+    const baseImg = (import.meta.env?.VITE_IMG_BASE as string) ?? ''
+    if (baseImg) return `${baseImg}/${p}`
+
+    return `${import.meta.env.BASE_URL ?? '/loading-time-frontend/'}default.png`
   }
-}
 
   useEffect(() => {
     if (!id) return
@@ -80,7 +83,13 @@ const buildImgSrc = (p?: string | null, isMock = false) => {
             <img
               src={src}
               alt={name}
-              onError={(e: any) => { e.target.src = '/default.png'  }}
+              onError={(e: any) => {
+                const fallback =
+                  `${import.meta.env.BASE_URL ?? '/loading-time-frontend/'}default.png`
+                if (e.target.src !== fallback) {
+                  e.target.src = fallback
+                }
+              }}
             />
           </div>
 

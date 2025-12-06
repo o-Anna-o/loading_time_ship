@@ -23,7 +23,6 @@ export default function ShipsList() {
     e.preventDefault()
     dispatch(applySearch())
   }
-
   return (
     <>
       <Navbar />

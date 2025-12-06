@@ -270,6 +270,6 @@ async function load(idToLoad: string | undefined) {
 // helper — формирует URL для изображения (minio)
 function getShipImageUrl(photoPath?: string) {
   if (!photoPath) return ''
-  const base = (import.meta.env?.VITE_IMG_BASE as string) ?? 'http://localhost:9000/loading-time-img/img'
+  const base = import.meta.env.VITE_IMG_BASE ?? 'http://localhost:9000/loading-time-img/img'
   return `${base}/${photoPath}`
 }
