@@ -1,6 +1,6 @@
 // src/api.ts
 import { getToken } from './auth'
-const API_BASE = '/api'
+const API_BASE = 'http://192.168.56.1:8080'
 
 // НЕ используем mock здесь — только бэкенд
 export type ShipsFilterParams = {

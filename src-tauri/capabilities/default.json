@@ -1,0 +1,29 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "default",
+  "description": "Capability for the main window",
+  "windows": ["main"],
+  "permissions": [
+    "cors-fetch:default",
+    "cors-fetch:allow-cors-request",
+    "cors-fetch:allow-cancel-cors-request",
+    {
+      "identifier": "http:default",
+      "allow": [
+        {
+          "url": "http://192.168.56.1:8080/*"
+        },
+        {
+          "url": "http://192.168.56.1:9000/*"
+        }
+      ],
+      "deny": []
+    },
+    "core:default",
+    "opener:default",
+    "http:allow-fetch",
+    "http:allow-fetch-read-body",
+    "http:allow-fetch-send",
+    "http:default"
+  ]
+}

@@ -1,5 +1,8 @@
 /* resources/index_style.css */
 
+body, #root {
+  min-width: 1024px;
+}
 
 * {
   box-sizing: border-box;
