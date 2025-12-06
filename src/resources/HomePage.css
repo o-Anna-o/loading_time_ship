@@ -1,0 +1,72 @@
+/* src/resources/HomePage.css */
+
+.home-wrapper {
+  width: 100%;
+  max-width: 1350px;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 80vh;
+  padding-top: 40px;
+}
+
+.home-card {
+  width: 100%;
+  max-width: 660px;                 
+  background-color: #3A3A3A;
+  padding: 40px;
+  border-radius: 5px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 26px;
+  margin-top: 30px;
+}
+
+.home-title {
+  font-size: 46px;
+  font-weight: 600;
+  margin: 0;
+  color: #fff;
+}
+
+.home-text {
+  font-size: 25px;
+  margin: 0;
+  line-height: 1.5;
+  color: #fff;
+}
+
+/* Адаптив */
+@media (max-width: 1220px) {
+  .home-card {
+    padding: 35px;
+  }
+}
+
+@media (max-width: 768px) {
+  .home-wrapper { padding: 0 15px; }
+  .home-card {
+    padding: 30px 25px;
+    gap: 24px;
+  }
+  .home-title { font-size: 38px; }
+}
+
+@media (max-width: 545px) {
+  .home-wrapper { padding: 0 10px; }
+  .home-card {
+    padding: 25px 18px;
+    gap: 20px;
+  }
+  .home-title { font-size: 32px; }
+  .home-text { font-size: 20px; }
+}
+
+@media (max-width: 480px) {
+  .home-title { font-size: 28px; }
+  .home-text { font-size: 18px; }
+}

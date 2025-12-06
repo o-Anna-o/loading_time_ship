@@ -1,0 +1,159 @@
+/* resources/ShipCard.css */
+
+* {
+  box-sizing: border-box;
+}
+
+.ship-item {
+  width: 100%;                   
+  max-width: 660px;              
+  background-color: #3A3A3A;
+  padding: 40px;
+  border-radius: 5px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 26px;
+
+  margin: 0 auto;                
+}
+
+.ship-image {
+  width: 100%;
+  max-width: 561px;
+  height: 318px;                  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.ship-image img {
+  max-width: 100%;
+  max-height: 100%;
+  height: auto;
+  width: auto;
+  object-fit: contain;
+}
+
+.ship-title a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 30px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.ship-item-text {
+  width: 100%;
+  max-width: 489px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  text-align: left;
+  font-size: 25px;              
+}
+
+.ship-item-text p {
+  margin: 0;
+}
+
+.ship-btn {
+  width: 100%;
+  max-width: 489px;
+  padding: 14px 32px;
+  background-color: #AA9B7D;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-size: 20px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+/*  АДАПТИВ  */
+
+/* 1200px и ниже — чуть сжимаем */
+@media (max-width: 1200px) {
+  .ship-item {
+    padding: 30px;
+  }
+
+  .ship-image {
+    max-width: 500px;
+  }
+
+  .ship-item-text,
+  .ship-btn {
+    max-width: 450px;
+  }
+}
+
+/* 768px и ниже — одна колонка */
+@media (max-width: 768px) {
+  .ship-item {
+    padding: 25px;
+  }
+
+  .ship-image {
+    max-width: 100%;
+    height: auto;              
+    min-height: 200px;         
+  }
+
+  .ship-item-text,
+  .ship-btn {
+    max-width: none;
+  }
+
+  .ship-title {
+    text-align: center;
+  }
+}
+
+/* 545px и ниже  */
+@media (max-width: 545px) {
+  .ship-item {
+    padding: 18px;
+    gap: 18px;
+  }
+
+  .ship-image {
+    min-height: 180px;
+  }
+
+  .ship-image img {
+    max-height: 240px;
+  }
+
+  .ship-title a {
+    font-size: 26px;
+  }
+
+  .ship-item-text {
+    gap: 12px;
+    font-size: 18px;        
+  }
+
+  .ship-btn {
+    font-size: 18px;
+    padding: 12px 20px;
+  }
+}
+
+/* Самые узкие экраны */
+@media (max-width: 380px) {
+  .ship-item {
+    padding: 15px;
+    gap: 15px;
+  }
+
+  .ship-title a {
+    font-size: 24px;
+  }
+
+  .ship-item-text {
+    font-size: 16px;
+  }
+}

@@ -1,4 +1,0 @@
-ServiceHost = "localhost" 
-ServicePort = 8080
-RedisHost = "localhost"
-RedisPort = 6379 

@@ -1,0 +1,30 @@
+/* resources/css/Breadcrumbs.css */
+
+.breadcrumbs {
+  position: relative;
+  
+  margin-top: 20px;        
+  
+  padding-left: 30px;       
+  color: white;
+  font-size: 25px;
+  font-weight: 500;
+}
+
+.breadcrumbs {
+  position: relative;
+  padding-left: 30px;
+  color: white;
+  font-size: 25px;
+  font-weight: 500;
+}
+
+.breadcrumbs a {
+  color: white;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.breadcrumbs a:hover {
+  color: #AA9B7D;
+}
