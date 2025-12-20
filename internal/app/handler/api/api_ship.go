@@ -30,7 +30,7 @@ type ShipHandler struct {
 
 // GetShipsAPI - GET /api/ships - список кораблей с фильтрацией
 
-// @Summary Get list of ships
+// @Summary Получить список кораблей
 // @Description Retrieve a list of ships with optional filters
 // @Tags ships
 // @Produce json
@@ -74,7 +74,7 @@ func (h *ShipHandler) GetShipsAPI(c *gin.Context) {
 }
 
 // GetShipAPI - GET /api/ships/:id - один корабль
-// @Summary Get a single ship
+// @Summary Один корабль
 // @Description Retrieve details of a specific ship by ID
 // @Tags ships
 // @Produce json
@@ -106,7 +106,7 @@ func (h *ShipHandler) GetShipAPI(c *gin.Context) {
 }
 
 // CreateShipAPI - POST /api/ships - создание корабля
-// @Summary Create a new ship
+// @Summary Создать корабль
 // @Description Add a new ship to the system
 // @Tags ships
 // @Accept json
@@ -138,7 +138,7 @@ func (h *ShipHandler) CreateShipAPI(c *gin.Context) {
 }
 
 // UpdateShipAPI - PUT /api/ships/:id - обновление корабля
-// @Summary Update a ship
+// @Summary Обновить поля корабля
 // @Description Update details of an existing ship by ID
 // @Tags ships
 // @Accept json
@@ -189,7 +189,7 @@ func (h *ShipHandler) UpdateShipAPI(c *gin.Context) {
 
 // DeleteShipAPI - DELETE /api/ships/:id - удаление корабля
 
-// @Summary Delete a ship
+// @Summary Удалить корабль
 // @Description Remove a ship from the system by ID
 // @Tags ships
 // @Produce json
@@ -313,7 +313,7 @@ func (h *ShipHandler) AddShipToRequestShipAPI(c *gin.Context) {
 
 // AddShipImageAPI - POST /api/ships/:id/image - добавление изображения
 
-// @Summary Добавление изображения
+// @Summary Добавить изображение
 // @Description Upload an image for a specific ship
 // @Tags ships
 // @Accept multipart/form-data

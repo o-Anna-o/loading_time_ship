@@ -15,7 +15,127 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/api/request-ships/{id}": {
+        "/api/request_ship": {
+            "get": {
+                "description": "Retrieve a list of requests with optional filters",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "request_ships"
+                ],
+                "summary": "Получить список заявок на расчет времени погрузки",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Start date filter",
+                        "name": "start_date",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "End date filter",
+                        "name": "end_date",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Status filter",
+                        "name": "status",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/ds.RequestShip"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "error: string",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/request_ship/basket": {
+            "get": {
+                "description": "Retrieve the count of ships in the user's draft request",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "request_ships"
+                ],
+                "summary": "Получить корзину запросов",
+                "responses": {
+                    "200": {
+                        "description": "data: {request_ship_id: int, ships_count: int}",
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    "401": {
+                        "description": "message: string",
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    "500": {
+                        "description": "error: string",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/request_ship/{id}": {
+            "get": {
+                "description": "Retrieve details of a specific request with its ships",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "request_ships"
+                ],
+                "summary": "Одна заявка на расчет времени погрузки",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Request ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "request_ship_id: int, status: string, creation_date: string, containers_20ft_count: int, containers_40ft_count: int, comment: string, loading_time: int, ships: []object",
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    "400": {
+                        "description": "error: string",
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    "404": {
+                        "description": "error: string",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                }
+            },
             "put": {
                 "description": "Update fields of an existing request",
                 "consumes": [
@@ -77,9 +197,48 @@ const docTemplate = `{
                         }
                     }
                 }
+            },
+            "delete": {
+                "description": "Remove an entire request from the system",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "request_ships"
+                ],
+                "summary": "Удаление всей заявки",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Request ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "status: string, message: string",
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    "400": {
+                        "description": "message: string",
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    "500": {
+                        "description": "error: string",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                }
             }
         },
-        "/api/request-ships/{id}/completion": {
+        "/api/request_ship/{id}/completion": {
             "post": {
                 "description": "Allow port_operator to complete or reject a formed request",
                 "produces": [
@@ -120,135 +279,6 @@ const docTemplate = `{
                     },
                     "404": {
                         "description": "description: string",
-                        "schema": {
-                            "type": "object"
-                        }
-                    },
-                    "500": {
-                        "description": "error: string",
-                        "schema": {
-                            "type": "object"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/request_ship": {
-            "get": {
-                "description": "Retrieve a list of requests with optional filters",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "request_ships"
-                ],
-                "summary": "Получить список заявок на расчет времени погрузки",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Start date filter",
-                        "name": "start_date",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "End date filter",
-                        "name": "end_date",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "Status filter",
-                        "name": "status",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/ds.RequestShip"
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "error: string",
-                        "schema": {
-                            "type": "object"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/request_ship/{id}": {
-            "get": {
-                "description": "Retrieve details of a specific request with its ships",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "request_ships"
-                ],
-                "summary": "Одна заявка на расчет времени погрузки",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Request ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "request_ship_id: int, status: string, creation_date: string, containers_20ft_count: int, containers_40ft_count: int, comment: string, loading_time: int, ships: []object",
-                        "schema": {
-                            "type": "object"
-                        }
-                    },
-                    "400": {
-                        "description": "error: string",
-                        "schema": {
-                            "type": "object"
-                        }
-                    },
-                    "404": {
-                        "description": "error: string",
-                        "schema": {
-                            "type": "object"
-                        }
-                    }
-                }
-            },
-            "delete": {
-                "description": "Remove an entire request from the system",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "request_ships"
-                ],
-                "summary": "Удаление всей заявки",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Request ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "status: string, message: string",
-                        "schema": {
-                            "type": "object"
-                        }
-                    },
-                    "400": {
-                        "description": "message: string",
                         "schema": {
                             "type": "object"
                         }
@@ -420,32 +450,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/requests/basket": {
-            "get": {
-                "description": "Retrieve the count of ships in the user's draft request",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "request_ships"
-                ],
-                "summary": "Получить корзину запросов",
-                "responses": {
-                    "200": {
-                        "description": "data: {request_ship_id: int, ships_count: int}",
-                        "schema": {
-                            "type": "object"
-                        }
-                    },
-                    "500": {
-                        "description": "error: string",
-                        "schema": {
-                            "type": "object"
-                        }
-                    }
-                }
-            }
-        },
         "/api/ships": {
             "get": {
                 "description": "Retrieve a list of ships with optional filters",
@@ -455,7 +459,7 @@ const docTemplate = `{
                 "tags": [
                     "ships"
                 ],
-                "summary": "Get list of ships",
+                "summary": "Получить список кораблей",
                 "parameters": [
                     {
                         "type": "string",
@@ -502,7 +506,7 @@ const docTemplate = `{
                 "tags": [
                     "ships"
                 ],
-                "summary": "Create a new ship",
+                "summary": "Создать корабль",
                 "parameters": [
                     {
                         "description": "Ship data",
@@ -545,7 +549,7 @@ const docTemplate = `{
                 "tags": [
                     "ships"
                 ],
-                "summary": "Get a single ship",
+                "summary": "Один корабль",
                 "parameters": [
                     {
                         "type": "integer",
@@ -587,7 +591,7 @@ const docTemplate = `{
                 "tags": [
                     "ships"
                 ],
-                "summary": "Update a ship",
+                "summary": "Обновить поля корабля",
                 "parameters": [
                     {
                         "type": "integer",
@@ -635,7 +639,7 @@ const docTemplate = `{
                 "tags": [
                     "ships"
                 ],
-                "summary": "Delete a ship",
+                "summary": "Удалить корабль",
                 "parameters": [
                     {
                         "type": "integer",
@@ -726,7 +730,7 @@ const docTemplate = `{
                 "tags": [
                     "ships"
                 ],
-                "summary": "Добавление изображения",
+                "summary": "Добавить изображение",
                 "parameters": [
                     {
                         "type": "integer",
@@ -1024,6 +1028,9 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "creationDate": {
+                    "type": "string"
+                },
+                "formationDate": {
                     "type": "string"
                 },
                 "loadingTime": {

@@ -43,9 +43,12 @@ func main() {
 		logrus.Infof("Incoming request: %s %s", c.Request.Method, c.Request.URL.Path)
 	})
 
-	// === CORS middleware ===
+	// CORS middleware
 	router.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"http://localhost:3000"}, // твой фронтенд
+		AllowOrigins: []string{
+			"http://192.168.1.68:3000",
+			"https://192.168.1.68:3000",
+		},
 		AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"},
 		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
 		ExposeHeaders:    []string{"Content-Length"},

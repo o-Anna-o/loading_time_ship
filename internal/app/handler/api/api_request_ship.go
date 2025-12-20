@@ -137,6 +137,8 @@ func (h *RequestShipHandler) GetRequestShipAPI(c *gin.Context) {
 		"request_ship_id":       requestShip.RequestShipID,
 		"status":                requestShip.Status,
 		"creation_date":         requestShip.CreationDate,
+		"formation_date":        requestShip.FormationDate,
+		"completion_date":       requestShip.CompletionDate,
 		"containers_20ft_count": requestShip.Containers20ftCount,
 		"containers_40ft_count": requestShip.Containers40ftCount,
 		"comment":               requestShip.Comment,
@@ -158,7 +160,7 @@ func (h *RequestShipHandler) GetRequestShipAPI(c *gin.Context) {
 	})
 }
 
-// UpdateRequestShipAPI - PUT /api/request-ships/:id - изменения полей заявки
+// UpdateRequestShipAPI - PUT /api/request_ship/:id - изменения полей заявки
 // @Summary Изменение полей заявки
 // @Description Update fields of an existing request
 // @Tags request_ships
@@ -169,7 +171,7 @@ func (h *RequestShipHandler) GetRequestShipAPI(c *gin.Context) {
 // @Success 200 {object} object "status: string, message: string"
 // @Failure 400 {object} object "error: string"
 // @Failure 500 {object} object "error: string"
-// @Router /api/request-ships/{id} [put]
+// @Router /api/request_ship/{id} [put]
 func (h *RequestShipHandler) UpdateRequestShipAPI(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
@@ -286,7 +288,7 @@ func (h *RequestShipHandler) FormRequestShipAPI(c *gin.Context) {
 	})
 }
 
-// CompleteRequestShipAPI - POST /api/request-ships/:id/completion - завершить/отклонить модератором
+// CompleteRequestShipAPI - POST /api/request_ship/:id/completion - завершить/отклонить модератором
 
 // @Summary Завершить или отклонить заявку (модератор)
 // @Description Allow port_operator to complete or reject a formed request
@@ -298,7 +300,7 @@ func (h *RequestShipHandler) FormRequestShipAPI(c *gin.Context) {
 // @Failure 400 {object} object "description: string"
 // @Failure 404 {object} object "description: string"
 // @Failure 500 {object} object "error: string"
-// @Router /api/request-ships/{id}/completion [post]
+// @Router /api/request_ship/{id}/completion [post]
 func (h *RequestShipHandler) CompleteRequestShipAPI(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {

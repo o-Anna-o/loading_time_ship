@@ -11,6 +11,8 @@ definitions:
         type: integer
       creationDate:
         type: string
+      formationDate:
+        type: string
       loadingTime:
         type: number
       requestShipID:
@@ -87,84 +89,6 @@ definitions:
 info:
   contact: {}
 paths:
-  /api/request-ships/{id}:
-    put:
-      consumes:
-      - application/json
-      description: Update fields of an existing request
-      parameters:
-      - description: Request ID
-        in: path
-        name: id
-        required: true
-        type: integer
-      - description: Request updates
-        in: body
-        name: request
-        required: true
-        schema:
-          properties:
-            comment:
-              type: string
-            containers_20ft_count:
-              type: integer
-            containers_40ft_count:
-              type: integer
-          type: object
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: 'status: string, message: string'
-          schema:
-            type: object
-        "400":
-          description: 'error: string'
-          schema:
-            type: object
-        "500":
-          description: 'error: string'
-          schema:
-            type: object
-      summary: Изменение полей заявки
-      tags:
-      - request_ships
-  /api/request-ships/{id}/completion:
-    post:
-      description: Allow port_operator to complete or reject a formed request
-      parameters:
-      - description: Request ID
-        in: path
-        name: id
-        required: true
-        type: integer
-      - description: Action (complete or reject)
-        in: formData
-        name: action
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: 'status: string, message: string, loading_time: int (if completed)'
-          schema:
-            type: object
-        "400":
-          description: 'description: string'
-          schema:
-            type: object
-        "404":
-          description: 'description: string'
-          schema:
-            type: object
-        "500":
-          description: 'error: string'
-          schema:
-            type: object
-      summary: Завершить или отклонить заявку (модератор)
-      tags:
-      - request_ships
   /api/request_ship:
     get:
       description: Retrieve a list of requests with optional filters
@@ -250,6 +174,83 @@ paths:
           schema:
             type: object
       summary: Одна заявка на расчет времени погрузки
+      tags:
+      - request_ships
+    put:
+      consumes:
+      - application/json
+      description: Update fields of an existing request
+      parameters:
+      - description: Request ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Request updates
+        in: body
+        name: request
+        required: true
+        schema:
+          properties:
+            comment:
+              type: string
+            containers_20ft_count:
+              type: integer
+            containers_40ft_count:
+              type: integer
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 'status: string, message: string'
+          schema:
+            type: object
+        "400":
+          description: 'error: string'
+          schema:
+            type: object
+        "500":
+          description: 'error: string'
+          schema:
+            type: object
+      summary: Изменение полей заявки
+      tags:
+      - request_ships
+  /api/request_ship/{id}/completion:
+    post:
+      description: Allow port_operator to complete or reject a formed request
+      parameters:
+      - description: Request ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Action (complete or reject)
+        in: formData
+        name: action
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 'status: string, message: string, loading_time: int (if completed)'
+          schema:
+            type: object
+        "400":
+          description: 'description: string'
+          schema:
+            type: object
+        "404":
+          description: 'description: string'
+          schema:
+            type: object
+        "500":
+          description: 'error: string'
+          schema:
+            type: object
+      summary: Завершить или отклонить заявку (модератор)
       tags:
       - request_ships
   /api/request_ship/{id}/formation:
@@ -357,7 +358,7 @@ paths:
       summary: Обновление количества кораблей в заявке
       tags:
       - request_ships
-  /api/requests/basket:
+  /api/request_ship/basket:
     get:
       description: Retrieve the count of ships in the user's draft request
       produces:
@@ -365,6 +366,10 @@ paths:
       responses:
         "200":
           description: 'data: {request_ship_id: int, ships_count: int}'
+          schema:
+            type: object
+        "401":
+          description: 'message: string'
           schema:
             type: object
         "500":
@@ -401,7 +406,7 @@ paths:
           description: 'error: string'
           schema:
             type: object
-      summary: Get list of ships
+      summary: Получить список кораблей
       tags:
       - ships
     post:
@@ -430,7 +435,7 @@ paths:
           description: 'error: string'
           schema:
             type: object
-      summary: Create a new ship
+      summary: Создать корабль
       tags:
       - ships
   /api/ships/{id}:
@@ -457,7 +462,7 @@ paths:
           description: 'error: string'
           schema:
             type: object
-      summary: Delete a ship
+      summary: Удалить корабль
       tags:
       - ships
     get:
@@ -483,7 +488,7 @@ paths:
           description: 'error: string'
           schema:
             type: object
-      summary: Get a single ship
+      summary: Один корабль
       tags:
       - ships
     put:
@@ -517,7 +522,7 @@ paths:
           description: 'error: string'
           schema:
             type: object
-      summary: Update a ship
+      summary: Обновить поля корабля
       tags:
       - ships
   /api/ships/{id}/add-to-ship-bucket:
@@ -591,7 +596,7 @@ paths:
           description: 'message: string'
           schema:
             type: object
-      summary: Добавление изображения
+      summary: Добавить изображение
       tags:
       - ships
   /api/users/login:

@@ -11,7 +11,6 @@ import (
 )
 
 // AuthMiddleware проверяет JWT и допустимые роли
-// AuthMiddleware проверяет JWT и допустимые роли
 func AuthMiddleware(allowedRoles ...string) gin.HandlerFunc {
 	return func(c *gin.Context) {
 

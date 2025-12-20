@@ -11,6 +11,7 @@ type RequestShip struct {
 	CreationDate        time.Time       `gorm:"column:creation_date"`
 	UserID              int             `gorm:"column:user_id"`
 	User                User            `gorm:"foreignKey:UserID"` // автозаполнение пользователя в заявках
+	FormationDate       *time.Time      `gorm:"column:formation_date"`
 	CompletionDate      *time.Time      `gorm:"column:completion_date"`
 	Containers20ftCount int             `gorm:"column:containers_20ft_count"`
 	Containers40ftCount int             `gorm:"column:containers_40ft_count"`
