@@ -405,7 +405,7 @@ func (h *RequestShipHandler) CompleteRequestShipAPI(c *gin.Context) {
 // LoadingTimeCallback — callback от Django после асинхронного расчёта
 func (h *RequestShipHandler) LoadingTimeCallback(c *gin.Context) {
 
-	logrus.Info("LoadingTimeCallback has worked!! ", c.Param("id"))
+	logrus.Info("LoadingTimeCallback работает, id = ", c.Param("id"))
 
 	const ASYNC_TOKEN = "12345678"
 	if c.GetHeader("Authorization") != "Bearer "+ASYNC_TOKEN {
@@ -430,7 +430,7 @@ func (h *RequestShipHandler) LoadingTimeCallback(c *gin.Context) {
 		callbackData.LoadingTime,
 	)
 
-	logrus.Info("Получили ответ от Django!!")
+	logrus.Info("Получили ответ от Django!")
 	logrus.Info("LoadingTime = ", callbackData.LoadingTime)
 
 	// Получаем заявку для обновления
