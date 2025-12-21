@@ -301,12 +301,12 @@ func (h *RequestShipHandler) FormRequestShipAPI(c *gin.Context) {
 // @Failure 404 {object} object "description: string"
 // @Failure 500 {object} object "error: string"
 // @Router /api/request_ship/{id}/completion [post]
+// CompleteRequestShipAPI - POST /api/request_ship/:id/completion - завершить/отклонить модератором
 func (h *RequestShipHandler) CompleteRequestShipAPI(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		logrus.Errorf("CompleteRequestShipAPI: Invalid request ID: %v", err)
 		c.JSON(http.StatusBadRequest, gin.H{
-
 			"message": "Invalid request ID",
 		})
 		return
@@ -316,7 +316,6 @@ func (h *RequestShipHandler) CompleteRequestShipAPI(c *gin.Context) {
 	if action == "" {
 		logrus.Errorf("CompleteRequestShipAPI: Action must be specified for request_ship_id=%d", id)
 		c.JSON(http.StatusBadRequest, gin.H{
-
 			"description": "Action must be specified",
 		})
 		return
@@ -326,79 +325,142 @@ func (h *RequestShipHandler) CompleteRequestShipAPI(c *gin.Context) {
 	if err != nil {
 		logrus.Errorf("CompleteRequestShipAPI: Request not found for request_ship_id=%d: %v", id, err)
 		c.JSON(http.StatusNotFound, gin.H{
-
 			"description": "Request not found",
 		})
 		return
 	}
 
-	// Проверяем что заявка в статусе "сформирован"
 	if requestShip.Status != "сформирован" {
-		logrus.Errorf("CompleteRequestShipAPI: Invalid status for request_ship_id=%d: %s", id, requestShip.Status)
 		c.JSON(http.StatusBadRequest, gin.H{
-
 			"description": "Only formed requests can be completed or rejected",
 		})
 		return
 	}
 
-	const port_operatorID = 1 // Фиксированный модератор
+	const portOperatorID = 1
 
 	if action == "complete" {
-		// Рассчитываем время погрузки (бизнес-логика из задания)
-		loadingTime, err := h.Repository.CalculateLoadingTime(
+
+		// 🔁 асинхронная отправка в Django
+		go func() {
+			if err := h.sendToDjangoLoadingTime(&requestShip); err != nil {
+				logrus.Errorf(
+					"Failed to send async loading time request for request_ship_id=%d: %v",
+					requestShip.RequestShipID,
+					err,
+				)
+			}
+		}()
+
+		// завершаем заявку БЕЗ расчёта
+		err = h.Repository.CompleteRequestShip(
 			id,
-			requestShip.Containers20ftCount,
-			requestShip.Containers40ftCount,
+			portOperatorID,
+			"завершен",
+			0,
 		)
 		if err != nil {
-			logrus.Errorf("CompleteRequestShipAPI: Failed to calculate loading time for request_ship_id=%d: %v", id, err)
-			c.JSON(http.StatusInternalServerError, gin.H{
-
-				"error": err.Error(),
-			})
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
 
-		// Завершаем заявку с расчетом времени
-		err = h.Repository.CompleteRequestShip(id, port_operatorID, "завершен", loadingTime)
-		if err != nil {
-			logrus.Errorf("CompleteRequestShipAPI: Failed to complete request_ship_id=%d: %v", id, err)
-			c.JSON(http.StatusInternalServerError, gin.H{
-
-				"error": err.Error(),
-			})
-			return
-		}
-
-		c.JSON(http.StatusOK, gin.H{
-			"message":      "Request completed successfully",
-			"loading_time": loadingTime,
+		c.JSON(http.StatusAccepted, gin.H{
+			"message": "Request completed, async calculation started",
 		})
+		return
+	}
 
-	} else if action == "reject" {
-		// Отклоняем заявку
-		err = h.Repository.CompleteRequestShip(id, port_operatorID, "отклонен", 0)
+	if action == "reject" {
+		err = h.Repository.CompleteRequestShip(id, portOperatorID, "отклонен", 0)
 		if err != nil {
-			logrus.Errorf("CompleteRequestShipAPI: Failed to reject request_ship_id=%d: %v", id, err)
-			c.JSON(http.StatusInternalServerError, gin.H{
-
-				"error": err.Error(),
-			})
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
 
 		c.JSON(http.StatusOK, gin.H{
-
 			"message": "Request rejected successfully",
 		})
-	} else {
-		logrus.Errorf("CompleteRequestShipAPI: Invalid action for request_ship_id=%d: %s", id, action)
-		c.JSON(http.StatusBadRequest, gin.H{
-
-			"description": "Action must be 'complete' or 'reject'",
-		})
+		return
 	}
+
+	c.JSON(http.StatusBadRequest, gin.H{
+		"description": "Action must be 'complete' or 'reject'",
+	})
+}
+
+// LoadingTimeCallback - POST /api/request_ship/{id}/loading-time-result
+
+// @Summary Получить результат асинхронного расчёта времени погрузки
+// @Description Callback-метод, вызываемый Django-сервисом после асинхронного расчёта
+// @Tags request_ships
+// @Accept json
+// @Produce json
+// @Param id path int true "RequestShip ID"
+// @Param Authorization header string true "Bearer async token"
+// @Success 200 {object} object "message: string"
+// @Failure 400 {object} object "error: string"
+// @Failure 401 {object} object "error: string"
+// @Failure 500 {object} object "error: string"
+// @Router /api/request_ship/{id}/loading-time-result [post]
+
+// LoadingTimeCallback — callback от Django после асинхронного расчёта
+func (h *RequestShipHandler) LoadingTimeCallback(c *gin.Context) {
+
+	logrus.Info("LoadingTimeCallback has worked!! ", c.Param("id"))
+
+	const ASYNC_TOKEN = "12345678"
+	if c.GetHeader("Authorization") != "Bearer "+ASYNC_TOKEN {
+		c.JSON(http.StatusUnauthorized, gin.H{
+			"error": "invalid async token",
+		})
+		return
+	}
+
+	// Парсинг данных от Django
+	var callbackData ds.DjangoLoadingTimeCallback
+	if err := c.ShouldBindJSON(&callbackData); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Invalid data format",
+		})
+		return
+	}
+
+	logrus.Info("Получили ответ от Django!!")
+	logrus.Info("LoadingTime = ", callbackData.LoadingTime)
+
+	// Получаем заявку для обновления
+	requestShip, err := h.Repository.GetRequestShipExcludingDeleted(callbackData.RequestShipID)
+	if err != nil {
+		logrus.Errorf("Ошибка при получении заявки для обновления: %v", err)
+		c.JSON(500, gin.H{
+			"error":   err,
+			"message": "не удалось получить заявку для обновления",
+		})
+		return
+	}
+
+	// Обновляем результат расчёта
+	if callbackData.Success {
+		requestShip.LoadingTime = callbackData.LoadingTime
+
+		err = h.Repository.UpdateLoadingTime(
+			callbackData.RequestShipID,
+			callbackData.LoadingTime,
+		)
+		if err != nil {
+			logrus.Errorf("Ошибка при сохранении loading_time: %v", err)
+			c.JSON(500, gin.H{
+				"error":   err,
+				"message": "Ошибка при сохранении результата расчёта!",
+			})
+			return
+		}
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"message":      "Асинхронный расчёт завершён",
+		"request_ship": requestShip,
+	})
 }
 
 // DeleteShipFromRequestShipAPI - DELETE /api/request_ship/:id/ships/:ship_id - удаление корабля из заявки

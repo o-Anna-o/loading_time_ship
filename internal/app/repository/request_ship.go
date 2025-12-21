@@ -1,3 +1,4 @@
+// internal/app/repository/request_ship.go
 package repository
 
 import (
@@ -210,4 +211,12 @@ func (r *Repository) UpdateRequestShipLoadingTime(requestShipID int, loadingTime
 	return r.db.Model(&ds.RequestShip{}).
 		Where("request_ship_id = ?", requestShipID).
 		Update("loading_time", loadingTime).Error
+}
+
+// UpdateRequestShipLoadingTime - сохраняет рассчитанное время погрузки (с Django)
+func (r *Repository) UpdateLoadingTime(requestShipID int, loadingTime float64) error {
+	return r.db.Model(&ds.RequestShip{}).
+		Where("request_ship_id = ?", requestShipID).
+		Update("loading_time", loadingTime).
+		Error
 }

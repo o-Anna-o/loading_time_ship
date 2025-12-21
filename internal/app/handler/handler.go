@@ -29,7 +29,6 @@ func (h *Handler) SetupRoutes(router *gin.Engine) {
 	router.GET("/ship/:id", h.GetShip)
 	router.GET("/request_ship", h.CreateOrRedirectRequestShip)
 	router.GET("/request_ship/:id", h.GetRequestShip)
-	router.POST("/request_ship/calculate_loading_time/:id", h.CalculateLoadingTime)
 	router.GET("/ships", h.GetShips)
 
 	// API маршруты
@@ -38,14 +37,18 @@ func (h *Handler) SetupRoutes(router *gin.Engine) {
 		//  1. ГОСТЬ: Чтение + регистрация/вход
 		apiGroup.GET("/ships", h.ShipAPIHandler.GetShipsAPI)
 		apiGroup.GET("/ships/:id", h.ShipAPIHandler.GetShipAPI)
-		//apiGroup.GET("/request_ship/basket", h.RequestShipAPIHandler.GetRequestShipBasketAPI)
+
+		apiGroup.POST(
+			"/request_ship/:id/loading-time-result",
+			h.RequestShipAPIHandler.LoadingTimeCallback,
+		)
 
 		// Регистрация и вход — ГОСТЬ
 		apiGroup.POST("/users/register", h.UserAPIHandler.RegisterUserAPI)
 		apiGroup.POST("/users/login", h.UserAPIHandler.LoginUserAPI)
 
 		//  2. АВТОРИЗОВАННЫЕ (creator +  port_manager)
-		authGroup := apiGroup.Group("", middleware.AuthMiddleware())	
+		authGroup := apiGroup.Group("", middleware.AuthMiddleware())
 		{
 			// УСЛУГИ
 			authGroup.POST("/ships", h.ShipAPIHandler.CreateShipAPI)
@@ -62,7 +65,7 @@ func (h *Handler) SetupRoutes(router *gin.Engine) {
 			authGroup.DELETE("/request_ship/:id", h.RequestShipAPIHandler.DeleteRequestShipAPI)
 			authGroup.GET("/request_ship/basket", h.RequestShipAPIHandler.GetRequestShipBasketAPI)
 			// М-М
-			authGroup.PUT("/request_sh	ip/:id/ships/:ship_id", h.RequestShipAPIHandler.UpdateShipInRequestAPI)
+			authGroup.PUT("/request_ship/:id/ships/:ship_id", h.RequestShipAPIHandler.UpdateShipInRequestAPI)
 			authGroup.DELETE("/request_ship/:id/ships/:ship_id", h.RequestShipAPIHandler.DeleteShipFromRequestShipAPI)
 
 			// ПРОФИЛЬ
@@ -71,11 +74,12 @@ func (h *Handler) SetupRoutes(router *gin.Engine) {
 			authGroup.PUT("/users/profile", h.UserAPIHandler.UpdateUserProfileAPI)
 		}
 
-		//  3. ТОЛЬКО МОДЕРАТОР — сначала парсим JWT, затем проверяем роль
+		//  3. ТОЛЬКО ОПЕРАТОР ПОРТА — сначала парсим JWT, затем проверяем роль
 		modGroup := apiGroup.Group("", middleware.AuthMiddleware(), middleware.ModeratorMiddleware())
 		{
 			modGroup.PUT("/request_ship/:id/completion", h.RequestShipAPIHandler.CompleteRequestShipAPI)
 		}
+
 	}
 }
 
