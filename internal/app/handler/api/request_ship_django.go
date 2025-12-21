@@ -36,7 +36,7 @@ func (h *RequestShipHandler) sendToDjangoLoadingTime(rs *ds.RequestShip) error {
 
 	req, err := http.NewRequest(
 		http.MethodPost,
-		DJANGO_URL+"/api/async/loading-time",
+		DJANGO_URL+"/calculate_loading_time/",
 		bytes.NewBuffer(jsonData),
 	)
 	if err != nil {

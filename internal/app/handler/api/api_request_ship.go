@@ -341,7 +341,6 @@ func (h *RequestShipHandler) CompleteRequestShipAPI(c *gin.Context) {
 
 	if action == "complete" {
 
-		// 🔁 асинхронная отправка в Django
 		go func() {
 			if err := h.sendToDjangoLoadingTime(&requestShip); err != nil {
 				logrus.Errorf(
@@ -424,6 +423,12 @@ func (h *RequestShipHandler) LoadingTimeCallback(c *gin.Context) {
 		})
 		return
 	}
+	logrus.Infof(
+		"Async result получен: request_ship_id=%d success=%v loading_time=%f",
+		callbackData.RequestShipID,
+		callbackData.Success,
+		callbackData.LoadingTime,
+	)
 
 	logrus.Info("Получили ответ от Django!!")
 	logrus.Info("LoadingTime = ", callbackData.LoadingTime)
