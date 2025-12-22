@@ -19,12 +19,29 @@ const (
 )
 
 // sendToDjangoLoadingTime — отправка асинхронного запроса в Django
+// sendToDjangoLoadingTime — отправка асинхронного запроса в Django
 func (h *RequestShipHandler) sendToDjangoLoadingTime(rs *ds.RequestShip) error {
 
+	// 1. Подготовка ships для расчёта кранов
+	type ShipCalc struct {
+		Cranes     int `json:"cranes"`
+		ShipsCount int `json:"ships_count"`
+	}
+
+	var ships []ShipCalc
+	for _, shipInReq := range rs.Ships {
+		ships = append(ships, ShipCalc{
+			Cranes:     shipInReq.Ship.Cranes,
+			ShipsCount: shipInReq.ShipsCount,
+		})
+	}
+
+	// 2. Тело запроса
 	reqBody := map[string]interface{}{
 		"request_ship_id": rs.RequestShipID,
 		"containers_20ft": rs.Containers20ftCount,
 		"containers_40ft": rs.Containers40ftCount,
+		"ships":           ships,
 	}
 
 	client := &http.Client{Timeout: 30 * time.Second}

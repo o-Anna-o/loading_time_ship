@@ -409,20 +409,22 @@ func (h *RequestShipHandler) LoadingTimeCallback(c *gin.Context) {
 
 	const ASYNC_TOKEN = "12345678"
 	if c.GetHeader("Authorization") != "Bearer "+ASYNC_TOKEN {
+		logrus.Warn("Invalid async token")
 		c.JSON(http.StatusUnauthorized, gin.H{
 			"error": "invalid async token",
 		})
 		return
 	}
 
-	// Парсинг данных от Django
 	var callbackData ds.DjangoLoadingTimeCallback
 	if err := c.ShouldBindJSON(&callbackData); err != nil {
+		logrus.Errorf("JSON bind error: %v", err)
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": "Invalid data format",
 		})
 		return
 	}
+
 	logrus.Infof(
 		"Async result получен: request_ship_id=%d success=%v loading_time=%f",
 		callbackData.RequestShipID,
@@ -430,33 +432,24 @@ func (h *RequestShipHandler) LoadingTimeCallback(c *gin.Context) {
 		callbackData.LoadingTime,
 	)
 
-	logrus.Info("Получили ответ от Django!")
-	logrus.Info("LoadingTime = ", callbackData.LoadingTime)
-
-	// Получаем заявку для обновления
 	requestShip, err := h.Repository.GetRequestShipExcludingDeleted(callbackData.RequestShipID)
 	if err != nil {
-		logrus.Errorf("Ошибка при получении заявки для обновления: %v", err)
-		c.JSON(500, gin.H{
-			"error":   err,
-			"message": "не удалось получить заявку для обновления",
+		logrus.Errorf("DB error: %v", err)
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": "request not found",
 		})
 		return
 	}
 
-	// Обновляем результат расчёта
 	if callbackData.Success {
-		requestShip.LoadingTime = callbackData.LoadingTime
-
 		err = h.Repository.UpdateLoadingTime(
 			callbackData.RequestShipID,
 			callbackData.LoadingTime,
 		)
 		if err != nil {
-			logrus.Errorf("Ошибка при сохранении loading_time: %v", err)
-			c.JSON(500, gin.H{
-				"error":   err,
-				"message": "Ошибка при сохранении результата расчёта!",
+			logrus.Errorf("Update error: %v", err)
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"error": "failed to update loading time",
 			})
 			return
 		}
