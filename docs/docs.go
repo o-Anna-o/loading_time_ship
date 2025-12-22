@@ -239,7 +239,7 @@ const docTemplate = `{
             }
         },
         "/api/request_ship/{id}/completion": {
-            "post": {
+            "put": {
                 "description": "Allow port_operator to complete or reject a formed request",
                 "produces": [
                     "application/json"
@@ -247,7 +247,7 @@ const docTemplate = `{
                 "tags": [
                     "request_ships"
                 ],
-                "summary": "Завершить или отклонить заявку (модератор)",
+                "summary": "Завершить или отклонить заявку (оператор порта)",
                 "parameters": [
                     {
                         "type": "integer",

@@ -218,7 +218,7 @@ paths:
       tags:
       - request_ships
   /api/request_ship/{id}/completion:
-    post:
+    put:
       description: Allow port_operator to complete or reject a formed request
       parameters:
       - description: Request ID
@@ -250,7 +250,7 @@ paths:
           description: 'error: string'
           schema:
             type: object
-      summary: Завершить или отклонить заявку (модератор)
+      summary: Завершить или отклонить заявку (оператор порта)
       tags:
       - request_ships
   /api/request_ship/{id}/formation:

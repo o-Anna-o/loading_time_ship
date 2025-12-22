@@ -19,7 +19,6 @@ const (
 )
 
 // sendToDjangoLoadingTime — отправка асинхронного запроса в Django
-// sendToDjangoLoadingTime — отправка асинхронного запроса в Django
 func (h *RequestShipHandler) sendToDjangoLoadingTime(rs *ds.RequestShip) error {
 
 	// 1. Подготовка ships для расчёта кранов

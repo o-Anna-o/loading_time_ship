@@ -288,9 +288,9 @@ func (h *RequestShipHandler) FormRequestShipAPI(c *gin.Context) {
 	})
 }
 
-// CompleteRequestShipAPI - POST /api/request_ship/:id/completion - завершить/отклонить модератором
+// CompleteRequestShipAPI - PUT /api/request_ship/:id/completion - завершить/отклонить модератором
 
-// @Summary Завершить или отклонить заявку (модератор)
+// @Summary Завершить или отклонить заявку (оператор порта)
 // @Description Allow port_operator to complete or reject a formed request
 // @Tags request_ships
 // @Produce json
@@ -300,7 +300,7 @@ func (h *RequestShipHandler) FormRequestShipAPI(c *gin.Context) {
 // @Failure 400 {object} object "description: string"
 // @Failure 404 {object} object "description: string"
 // @Failure 500 {object} object "error: string"
-// @Router /api/request_ship/{id}/completion [post]
+// @Router /api/request_ship/{id}/completion [put]
 // CompleteRequestShipAPI - POST /api/request_ship/:id/completion - завершить/отклонить модератором
 func (h *RequestShipHandler) CompleteRequestShipAPI(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
