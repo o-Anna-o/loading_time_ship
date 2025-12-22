@@ -186,6 +186,7 @@ func (h *RequestShipHandler) UpdateRequestShipAPI(c *gin.Context) {
 		Containers20ftCount int    `json:"containers_20ft_count"`
 		Containers40ftCount int    `json:"containers_40ft_count"`
 		Comment             string `json:"comment"`
+		Status              string `json:"status"`
 	}
 
 	if err := c.BindJSON(&updates); err != nil {
@@ -197,7 +198,7 @@ func (h *RequestShipHandler) UpdateRequestShipAPI(c *gin.Context) {
 	}
 
 	// Обновляем поля без расчета времени (расчет будет при завершении)
-	err = h.Repository.UpdateRequestShipFields(id, updates.Containers20ftCount, updates.Containers40ftCount, updates.Comment)
+	err = h.Repository.UpdateRequestShipFields(id, updates.Containers20ftCount, updates.Containers40ftCount, updates.Comment, updates.Status)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 

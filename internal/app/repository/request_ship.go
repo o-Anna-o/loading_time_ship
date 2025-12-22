@@ -116,7 +116,7 @@ func (r *Repository) CalculateLoadingTime(requestShipID, containers20ft, contain
 }
 
 // UpdateRequestShipFields - обновляет поля заявки и рассчитывает время погрузки
-func (r *Repository) UpdateRequestShipFields(requestShipID, containers20ft, containers40ft int, comment string) error {
+func (r *Repository) UpdateRequestShipFields(requestShipID, containers20ft, containers40ft int, comment string, status string) error {
 	// Рассчитываем время погрузки
 	loadingTime, err := r.CalculateLoadingTime(requestShipID, containers20ft, containers40ft)
 	if err != nil {
@@ -129,6 +129,7 @@ func (r *Repository) UpdateRequestShipFields(requestShipID, containers20ft, cont
 		"containers_40ft_count": containers40ft,
 		"comment":               comment,
 		"loading_time":          loadingTime,
+		"status":                status,
 	}).Error
 }
 

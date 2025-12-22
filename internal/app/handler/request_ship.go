@@ -134,8 +134,9 @@ func (h *Handler) CalculateLoadingTime(c *gin.Context) {
 	containers20ft, _ := strconv.Atoi(c.PostForm("containers_20ft"))
 	containers40ft, _ := strconv.Atoi(c.PostForm("containers_40ft"))
 	comment := c.PostForm("comment")
+	status := c.PostForm("status")
 
-	err = h.Repository.UpdateRequestShipFields(requestShipID, containers20ft, containers40ft, comment)
+	err = h.Repository.UpdateRequestShipFields(requestShipID, containers20ft, containers40ft, comment, status)
 	if err != nil {
 		h.errorHandler(c, http.StatusInternalServerError, err)
 		return
