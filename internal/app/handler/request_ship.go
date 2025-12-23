@@ -77,7 +77,7 @@ func (h *Handler) AddShipToRequestShip(c *gin.Context) {
 	c.Redirect(http.StatusFound, fmt.Sprintf("/request_ship/%d", requestShip.RequestShipID))
 }
 
-// POST /request_ship/:id/remove/:ship_id - удалить корабль из заявки (HTML-версия)
+// POST /request_ship/:id/remove/:ship_id - удалить корабль из заявки
 func (h *Handler) RemoveShipFromRequestShip(c *gin.Context) {
 	requestShipIDStr := c.Param("id")
 	shipIDStr := c.Param("ship_id")
