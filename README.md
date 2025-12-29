@@ -6,6 +6,6 @@
 
 ## Ссылки
 - GitHubPages: https://o-anna-o.github.io/loading-time-frontend/
-- Бэкенд (основной веб-сервис): https://github.com/o-Anna-o/loading_time_ship
+- Бэкенд (основной веб-сервис): https://github.com/o-Anna-o/Loading_Time_Ship_RIP_2025
 - Бэкенд (асинхронный сервис): https://github.com/o-Anna-o/Loading_Time_Ship_Async_Service_RIP_2025
 - Фронтенд: https://github.com/o-Anna-o/Loading_Time_Frontend_RIP_2025
